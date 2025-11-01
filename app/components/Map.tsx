@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import type { Entry } from "contentful";
 import type { RestaurantSkeleton } from "@/lib/contentful/types";
-import { useMenu } from "./MenuContext";
+import { usePanel } from "./PanelContext";
 
 interface MapProps {
   restaurants: Entry<RestaurantSkeleton, undefined, string>[];
@@ -19,13 +19,13 @@ export default function Map({
 }: MapProps) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const { closeMenu } = useMenu();
-  const closeMenuRef = useRef(closeMenu);
+  const { closePanel } = usePanel();
+  const closePanelRef = useRef(closePanel);
 
-  // Update ref when closeMenu changes, but don't trigger map reload
+  // Update ref when closePanel changes, but don't trigger map reload
   useEffect(() => {
-    closeMenuRef.current = closeMenu;
-  }, [closeMenu]);
+    closePanelRef.current = closePanel;
+  }, [closePanel]);
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -125,7 +125,7 @@ export default function Map({
         // Center map on the marker with smooth animation
         map.flyTo({
           center: coordinates,
-          zoom: Math.max(map.getZoom(), 15),
+          zoom: Math.max(map.getZoom(), 16),
           essential: true,
           duration: 1000,
         });
@@ -163,16 +163,16 @@ export default function Map({
         map.getCanvas().style.cursor = "";
       });
 
-      // Close menu when clicking on the map background (not on restaurants)
+      // Close panel when clicking on the map background (not on restaurants)
       map.on("click", (e: mapboxgl.MapMouseEvent) => {
         // Check if click is on a restaurant marker
         const features = map.queryRenderedFeatures(e.point, {
           layers: ["restaurants"],
         });
 
-        // Only close menu if not clicking on a restaurant
+        // Only close panel if not clicking on a restaurant
         if (features.length === 0) {
-          closeMenuRef.current();
+          closePanelRef.current();
         }
       });
     });
@@ -182,5 +182,10 @@ export default function Map({
     };
   }, [restaurants, zoom, style]);
 
-  return <div ref={mapContainerRef} className="w-screen h-screen m-0 p-0" />;
+  return (
+    <div
+      ref={mapContainerRef}
+      className="w-screen h-screen m-0 p-0 relative z-0"
+    />
+  );
 }

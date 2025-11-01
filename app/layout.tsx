@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import MenuWithContent from "./components/MenuWithContent";
+import { PanelProvider } from "./components/PanelContext";
 
 export const metadata: Metadata = {
   title: "alabouf",
@@ -21,7 +21,7 @@ export default function RootLayout({
       data-darkreader-scheme="dark"
     >
       <body className="m-0 p-0 antialiased">
-        <MenuWithContent>{children}</MenuWithContent>
+        <PanelProvider>{children}</PanelProvider>
       </body>
     </html>
   );
