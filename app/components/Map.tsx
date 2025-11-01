@@ -1,171 +1,186 @@
-'use client'
+"use client";
 
-import { useEffect, useRef } from 'react'
-import mapboxgl from 'mapbox-gl'
-import type { Entry } from 'contentful'
-import type { RestaurantSkeleton } from '@/lib/contentful/types'
-import { useMenu } from './MenuContext'
+import { useEffect, useRef } from "react";
+import mapboxgl from "mapbox-gl";
+import type { Entry } from "contentful";
+import type { RestaurantSkeleton } from "@/lib/contentful/types";
+import { useMenu } from "./MenuContext";
 
 interface MapProps {
-  restaurants: Entry<RestaurantSkeleton, undefined, string>[]
-  zoom?: number
-  style?: string
+  restaurants: Entry<RestaurantSkeleton, undefined, string>[];
+  zoom?: number;
+  style?: string;
 }
 
-export default function Map({ 
+export default function Map({
   restaurants,
   zoom = 11,
-  style = 'mapbox://styles/alabouf/cmhfp7e88001g01qib2sbedku'
+  style = "mapbox://styles/alabouf/cmhfp7e88001g01qib2sbedku",
 }: MapProps) {
-  const mapContainerRef = useRef<HTMLDivElement | null>(null)
-  const mapRef = useRef<mapboxgl.Map | null>(null)
-  const { closeMenu } = useMenu()
-  const closeMenuRef = useRef(closeMenu)
-  
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const { closeMenu } = useMenu();
+  const closeMenuRef = useRef(closeMenu);
+
   // Update ref when closeMenu changes, but don't trigger map reload
   useEffect(() => {
-    closeMenuRef.current = closeMenu
-  }, [closeMenu])
+    closeMenuRef.current = closeMenu;
+  }, [closeMenu]);
 
   useEffect(() => {
-    if (!mapContainerRef.current) return
+    if (!mapContainerRef.current) return;
 
-    mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string
+    mapboxgl.accessToken = process.env
+      .NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style,
       zoom,
-    })
+    });
 
-    mapRef.current = map
+    mapRef.current = map;
 
-    map.on('load', () => {
+    map.on("load", () => {
       // Convert restaurants to GeoJSON format (most efficient for Mapbox)
       const geojson: GeoJSON.FeatureCollection<GeoJSON.Point> = {
-        type: 'FeatureCollection',
+        type: "FeatureCollection",
         features: restaurants
-          .filter(restaurant => restaurant.fields.location)
-          .map(restaurant => ({
-            type: 'Feature',
+          .filter((restaurant) => restaurant.fields.location)
+          .map((restaurant) => ({
+            type: "Feature",
             geometry: {
-              type: 'Point',
+              type: "Point",
               coordinates: [
                 restaurant.fields.location!.lon,
-                restaurant.fields.location!.lat
-              ]
+                restaurant.fields.location!.lat,
+              ],
             },
             properties: {
               id: restaurant.sys.id,
               name: restaurant.fields.name,
               favorite: restaurant.fields.favorite || false,
               instagram: restaurant.fields.instagram,
-              tags: restaurant.fields.tags || []
-            }
-          }))
-      }
+              tags: restaurant.fields.tags || [],
+            },
+          })),
+      };
 
       // Add source
-      map.addSource('restaurants', {
-        type: 'geojson',
+      map.addSource("restaurants", {
+        type: "geojson",
         data: geojson,
-        cluster: false
-      })
+        cluster: false,
+      });
 
       // Add layer for restaurant markers
       map.addLayer({
-        id: 'restaurants',
-        type: 'circle',
-        source: 'restaurants',
+        id: "restaurants",
+        type: "circle",
+        source: "restaurants",
         paint: {
-          'circle-radius': 8,
-          'circle-color': [
-            'case',
-            ['get', 'favorite'],
-            '#ef4444', // red for favorites
-            '#3b82f6'  // blue for regular
+          "circle-radius": 8,
+          "circle-color": [
+            "case",
+            ["get", "favorite"],
+            "#ef4444", // red for favorites
+            "#3b82f6", // blue for regular
           ],
-          'circle-stroke-width': 2,
-          'circle-stroke-color': '#ffffff'
-        }
-      })
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "#ffffff",
+        },
+      });
 
       // Fit map to show all restaurants
       if (geojson.features.length > 0) {
-        const bounds = new mapboxgl.LngLatBounds()
-        geojson.features.forEach(feature => {
-          bounds.extend(feature.geometry.coordinates as [number, number])
-        })
-        const container = map.getContainer()
-        const padding = Math.min(container.offsetWidth, container.offsetHeight) * 0.3
-        map.fitBounds(bounds, { padding })
+        const bounds = new mapboxgl.LngLatBounds();
+        geojson.features.forEach((feature) => {
+          bounds.extend(feature.geometry.coordinates as [number, number]);
+        });
+        const container = map.getContainer();
+        const padding =
+          Math.min(container.offsetWidth, container.offsetHeight) * 0.3;
+        map.fitBounds(bounds, { padding });
       }
 
-      // Add popup on click
-      map.on('click', 'restaurants', (e) => {
-        if (!e.features?.[0]) return
-        
-        const feature = e.features[0]
-        const coordinates = (feature.geometry as GeoJSON.Point).coordinates.slice() as [number, number]
-        const { name, instagram, tags } = feature.properties as { 
-          name: string
-          instagram?: string
-          tags: string[]
-        }
+      // Add popup on click and center map on marker
+      map.on("click", "restaurants", (e) => {
+        if (!e.features?.[0]) return;
+
+        const feature = e.features[0];
+        const coordinates = (
+          feature.geometry as GeoJSON.Point
+        ).coordinates.slice() as [number, number];
+        const { name, instagram, tags } = feature.properties as {
+          name: string;
+          instagram?: string;
+          tags: string[];
+        };
 
         // Ensure popup appears over the correct location
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
 
-        const tagsArray = Array.isArray(tags) ? tags : []
-        const tagsHtml = tagsArray.length > 0 
-          ? `<p class="text-sm text-gray-600">${tagsArray.join(', ')}</p>` 
-          : ''
-        
-        const instagramHtml = instagram 
-          ? `<a href="https://instagram.com/${instagram}" target="_blank" rel="noopener noreferrer" class="text-sm text-blue-600 hover:underline">@${instagram}</a>` 
-          : ''
+        // Center map on the marker with smooth animation
+        map.flyTo({
+          center: coordinates,
+          zoom: Math.max(map.getZoom(), 15),
+          essential: true,
+          duration: 1000,
+        });
+
+        const tagsArray = Array.isArray(tags) ? tags : [];
+        const tagsHtml =
+          tagsArray.length > 0
+            ? `<p class="text-sm text-gray-600">${tagsArray.join(", ")}</p>`
+            : "";
+
+        const instagramHtml = instagram
+          ? `<a href="https://instagram.com/${instagram}" target="_blank" rel="noopener noreferrer" class="text-sm text-blue-600 hover:underline">@${instagram}</a>`
+          : "";
 
         new mapboxgl.Popup()
           .setLngLat(coordinates)
-          .setHTML(`
+          .setHTML(
+            `
             <div class="p-2">
               <h3 class="font-bold text-lg">${name}</h3>
               ${tagsHtml}
               ${instagramHtml}
             </div>
-          `)
-          .addTo(map)
-      })
+          `
+          )
+          .addTo(map);
+      });
 
       // Change cursor on hover
-      map.on('mouseenter', 'restaurants', () => {
-        map.getCanvas().style.cursor = 'pointer'
-      })
+      map.on("mouseenter", "restaurants", () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
 
-      map.on('mouseleave', 'restaurants', () => {
-        map.getCanvas().style.cursor = ''
-      })
+      map.on("mouseleave", "restaurants", () => {
+        map.getCanvas().style.cursor = "";
+      });
 
       // Close menu when clicking on the map background (not on restaurants)
-      map.on('click', (e: mapboxgl.MapMouseEvent) => {
+      map.on("click", (e: mapboxgl.MapMouseEvent) => {
         // Check if click is on a restaurant marker
         const features = map.queryRenderedFeatures(e.point, {
-          layers: ['restaurants']
-        })
-        
+          layers: ["restaurants"],
+        });
+
         // Only close menu if not clicking on a restaurant
         if (features.length === 0) {
-          closeMenuRef.current()
+          closeMenuRef.current();
         }
-      })
-    })
+      });
+    });
 
     return () => {
-      map.remove()
-    }
-  }, [restaurants, zoom, style])
+      map.remove();
+    };
+  }, [restaurants, zoom, style]);
 
-  return <div ref={mapContainerRef} className="w-screen h-screen m-0 p-0" />
+  return <div ref={mapContainerRef} className="w-screen h-screen m-0 p-0" />;
 }
