@@ -4,22 +4,28 @@ import { useEffect, useRef } from 'react'
 import mapboxgl from 'mapbox-gl'
 import type { Entry } from 'contentful'
 import type { RestaurantSkeleton } from '@/lib/contentful/types'
+import { useMenu } from './MenuContext'
 
 interface MapProps {
   restaurants: Entry<RestaurantSkeleton, undefined, string>[]
-  center?: [number, number]
   zoom?: number
   style?: string
 }
 
 export default function Map({ 
   restaurants,
-  center = [-73.5673, 45.5017], 
   zoom = 11,
-  style = 'mapbox://styles/mapbox/streets-v12'
+  style = 'mapbox://styles/alabouf/cmhfp7e88001g01qib2sbedku'
 }: MapProps) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<mapboxgl.Map | null>(null)
+  const { closeMenu } = useMenu()
+  const closeMenuRef = useRef(closeMenu)
+  
+  // Update ref when closeMenu changes, but don't trigger map reload
+  useEffect(() => {
+    closeMenuRef.current = closeMenu
+  }, [closeMenu])
 
   useEffect(() => {
     if (!mapContainerRef.current) return
@@ -29,7 +35,6 @@ export default function Map({
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style,
-      center,
       zoom,
     })
 
@@ -142,12 +147,25 @@ export default function Map({
       map.on('mouseleave', 'restaurants', () => {
         map.getCanvas().style.cursor = ''
       })
+
+      // Close menu when clicking on the map background (not on restaurants)
+      map.on('click', (e: mapboxgl.MapMouseEvent) => {
+        // Check if click is on a restaurant marker
+        const features = map.queryRenderedFeatures(e.point, {
+          layers: ['restaurants']
+        })
+        
+        // Only close menu if not clicking on a restaurant
+        if (features.length === 0) {
+          closeMenuRef.current()
+        }
+      })
     })
 
     return () => {
       map.remove()
     }
-  }, [restaurants, center, zoom, style])
+  }, [restaurants, zoom, style])
 
   return <div ref={mapContainerRef} className="w-screen h-screen m-0 p-0" />
 }
