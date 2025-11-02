@@ -11,7 +11,7 @@ interface PanelWithContentProps {
 }
 
 export default function PanelWithContent({ children }: PanelWithContentProps) {
-  const { isOpen, closePanel, openPanel, togglePanel } = usePanel();
+  const { isOpen, openPanel, togglePanel } = usePanel();
   const pathname = usePathname();
   const lastPathnameRef = useRef<string>("");
 
