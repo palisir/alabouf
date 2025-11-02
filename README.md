@@ -48,3 +48,4 @@ bun run dev
 - [ ] Add mobile responsiveness
 - [ ] Add search/filter functionality for restaurants
 - [ ] Add social sharing functionality
+- [ ] Add i18n
