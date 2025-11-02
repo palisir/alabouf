@@ -45,8 +45,10 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
         {/* Panel content */}
         <div className="p-6 overflow-y-auto h-[calc(100%-80px)]">
           {children}
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center space-x-4">
             <Link href="/contact">contact</Link>
+            <span>•</span>
+            <Link href="/mentions-legales">mentions légales</Link>
           </div>
         </div>
       </div>

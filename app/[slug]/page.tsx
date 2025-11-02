@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import type { Document } from "@contentful/rich-text-types";
 import { getStaticPageBySlug } from "@/lib/contentful/static-pages";
@@ -27,6 +28,9 @@ export default async function StaticPage({ params }: StaticPageProps) {
 
   return (
     <article>
+      <Link href="/" className="text-sm text-gray-600 hover:text-gray-900 mb-4 inline-block">
+        ← Retour à l&apos;accueil
+      </Link>
       <h2 className="text-2xl font-semibold text-gray-900 mb-4">{title}</h2>
       {body && (
         <div className="text-sm text-gray-700 mt-4 prose prose-sm max-w-none">
