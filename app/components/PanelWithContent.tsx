@@ -15,18 +15,16 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
   const pathname = usePathname();
   const lastPathnameRef = useRef<string>("");
 
-  // Open panel when navigating to a restaurant page (list or detail)
+  // Open panel when navigating to any page (except home)
   useEffect(() => {
-    const isRestaurantListPage = pathname === "/restaurants";
-    const isRestaurantDetailPage = /^\/restaurants\/[^/]+$/.test(pathname);
-    const isRestaurantPage = isRestaurantListPage || isRestaurantDetailPage;
-
-    // Only open if we're on a restaurant page and it's a new navigation (pathname changed)
-    if (isRestaurantPage && pathname !== lastPathnameRef.current) {
+    const isHomePage = pathname === "/";
+    
+    // Only open if we're not on home page and it's a new navigation (pathname changed)
+    if (!isHomePage && pathname !== lastPathnameRef.current) {
       openPanel();
       lastPathnameRef.current = pathname;
-    } else if (!isRestaurantPage) {
-      // Reset the ref when navigating away from restaurant pages
+    } else if (isHomePage) {
+      // Reset the ref when navigating to home page
       lastPathnameRef.current = "";
     }
   }, [pathname, openPanel]);

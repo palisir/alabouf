@@ -18,6 +18,7 @@ export interface StaticPageSkeleton extends EntrySkeletonType {
   contentTypeId: 'staticPage';
   fields: {
     title: EntryFieldTypes.Symbol;
+    slug: EntryFieldTypes.Symbol;
     body: EntryFieldTypes.RichText;
   };
 }
