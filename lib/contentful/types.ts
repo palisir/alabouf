@@ -4,6 +4,7 @@ export interface RestaurantSkeleton extends EntrySkeletonType {
   contentTypeId: 'restaurant';
   fields: {
     name: EntryFieldTypes.Symbol;
+    slug: EntryFieldTypes.Symbol;
     review?: EntryFieldTypes.RichText;
     location?: EntryFieldTypes.Location;
     picture?: EntryFieldTypes.Array<EntryFieldTypes.AssetLink>;

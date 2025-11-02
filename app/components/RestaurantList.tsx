@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { Entry } from "contentful";
 import type { RestaurantSkeleton } from "@/lib/contentful/types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
@@ -21,7 +22,8 @@ export default function RestaurantList({ restaurants }: RestaurantListProps) {
   return (
     <div className="space-y-6">
       {restaurants.map((restaurant) => {
-        const { name, favorite, instagram, tags, review } = restaurant.fields;
+        const { name, slug, favorite, instagram, tags, review } =
+          restaurant.fields;
 
         return (
           <article
@@ -29,7 +31,11 @@ export default function RestaurantList({ restaurants }: RestaurantListProps) {
             className="border-b border-gray-200 pb-6 last:border-b-0"
           >
             <div className="flex items-start justify-between gap-3 mb-2">
-              <h3 className="text-xl font-semibold text-gray-900">{name}</h3>
+              <Link href={`/restaurants/${slug}`}>
+                <h3 className="text-xl font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">
+                  {name}
+                </h3>
+              </Link>
               {favorite && (
                 <span
                   className="flex-shrink-0 text-red-500 text-sm font-medium"

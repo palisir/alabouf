@@ -2,17 +2,13 @@
 
 import PanelToggleButton from "./PanelToggleButton";
 import { usePanel } from "./PanelContext";
-import RestaurantList from "./RestaurantList";
-import { RestaurantSkeleton } from "@/lib/contentful/types";
-import { Entry } from "contentful";
+import { ReactNode } from "react";
 
 interface PanelWithContentProps {
-  restaurants: Entry<RestaurantSkeleton, undefined, string>[];
+  children: ReactNode;
 }
 
-export default function PanelWithContent({
-  restaurants,
-}: PanelWithContentProps) {
+export default function PanelWithContent({ children }: PanelWithContentProps) {
   const { isOpen, closePanel, togglePanel } = usePanel();
 
   return (
@@ -30,7 +26,7 @@ export default function PanelWithContent({
 
         {/* Panel content */}
         <div className="p-6 overflow-y-auto h-[calc(100%-80px)]">
-          <RestaurantList restaurants={restaurants} />
+          {children}
         </div>
       </div>
     </>
