@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import mapboxgl from "mapbox-gl";
 import type { Entry } from "contentful";
 import type { RestaurantSkeleton } from "@/lib/contentful/types";
@@ -21,11 +22,17 @@ export default function Map({
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const { closePanel } = usePanel();
   const closePanelRef = useRef(closePanel);
+  const pathname = usePathname();
+  const pathnameRef = useRef(pathname);
+  const router = useRouter();
+  const routerRef = useRef(router);
 
-  // Update ref when closePanel changes, but don't trigger map reload
+  // Update refs when values change, but don't trigger map reload
   useEffect(() => {
     closePanelRef.current = closePanel;
-  }, [closePanel]);
+    pathnameRef.current = pathname;
+    routerRef.current = router;
+  }, [closePanel, pathname, router]);
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -58,6 +65,7 @@ export default function Map({
             },
             properties: {
               id: restaurant.sys.id,
+              slug: restaurant.fields.slug,
               name: restaurant.fields.name,
               favorite: restaurant.fields.favorite || false,
               instagram: restaurant.fields.instagram,
@@ -91,8 +99,31 @@ export default function Map({
         },
       });
 
-      // Fit map to show all restaurants
-      if (geojson.features.length > 0) {
+      // Check if we're on a single restaurant page
+      const restaurantSlugMatch = pathnameRef.current.match(
+        /^\/restaurants\/([^/]+)$/
+      );
+      const restaurantSlug = restaurantSlugMatch?.[1];
+
+      if (restaurantSlug) {
+        // Find the restaurant by slug and center on it
+        const restaurant = restaurants.find(
+          (r) => r.fields.slug === restaurantSlug && r.fields.location
+        );
+
+        if (restaurant) {
+          const coordinates: [number, number] = [
+            restaurant.fields.location!.lon,
+            restaurant.fields.location!.lat,
+          ];
+          map.flyTo({
+            center: coordinates,
+            zoom: 16,
+            duration: 0,
+          });
+        }
+      } else if (geojson.features.length > 0) {
+        // Fit map to show all restaurants
         const bounds = new mapboxgl.LngLatBounds();
         geojson.features.forEach((feature) => {
           bounds.extend(feature.geometry.coordinates as [number, number]);
@@ -111,11 +142,15 @@ export default function Map({
         const coordinates = (
           feature.geometry as GeoJSON.Point
         ).coordinates.slice() as [number, number];
-        const { name, instagram, tags } = feature.properties as {
+        const { name, slug, instagram, tags } = feature.properties as {
           name: string;
+          slug: string;
           instagram?: string;
           tags: string[];
         };
+
+        // Navigate to the restaurant detail page
+        routerRef.current.push(`/restaurants/${slug}`);
 
         // Ensure popup appears over the correct location
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
@@ -181,6 +216,33 @@ export default function Map({
       map.remove();
     };
   }, [restaurants, zoom, style]);
+
+  // Update map center when pathname changes (navigating between restaurants)
+  // This handles pathname changes after the map is already loaded
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const restaurantSlugMatch = pathname.match(/^\/restaurants\/([^/]+)$/);
+    const restaurantSlug = restaurantSlugMatch?.[1];
+
+    if (restaurantSlug && mapRef.current.isStyleLoaded()) {
+      const restaurant = restaurants.find(
+        (r) => r.fields.slug === restaurantSlug && r.fields.location
+      );
+
+      if (restaurant) {
+        const coordinates: [number, number] = [
+          restaurant.fields.location!.lon,
+          restaurant.fields.location!.lat,
+        ];
+        mapRef.current.flyTo({
+          center: coordinates,
+          zoom: 18,
+          duration: 1000,
+        });
+      }
+    }
+  }, [pathname, restaurants]);
 
   return (
     <div

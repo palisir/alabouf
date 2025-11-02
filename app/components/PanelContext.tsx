@@ -5,6 +5,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 interface PanelContextType {
   isOpen: boolean;
   closePanel: () => void;
+  openPanel: () => void;
   togglePanel: () => void;
 }
 
@@ -27,9 +28,12 @@ export function PanelProvider({ children }: PanelProviderProps) {
 
   const togglePanel = () => setIsOpen(!isOpen);
   const closePanel = () => setIsOpen(false);
+  const openPanel = () => setIsOpen(true);
 
   return (
-    <PanelContext.Provider value={{ isOpen, closePanel, togglePanel }}>
+    <PanelContext.Provider
+      value={{ isOpen, closePanel, openPanel, togglePanel }}
+    >
       {children}
     </PanelContext.Provider>
   );

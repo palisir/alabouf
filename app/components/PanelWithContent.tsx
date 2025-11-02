@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import PanelToggleButton from "./PanelToggleButton";
 import { usePanel } from "./PanelContext";
 import { ReactNode } from "react";
@@ -9,7 +11,23 @@ interface PanelWithContentProps {
 }
 
 export default function PanelWithContent({ children }: PanelWithContentProps) {
-  const { isOpen, closePanel, togglePanel } = usePanel();
+  const { isOpen, closePanel, openPanel, togglePanel } = usePanel();
+  const pathname = usePathname();
+  const lastPathnameRef = useRef<string>("");
+
+  // Open panel when navigating to a restaurant detail page
+  useEffect(() => {
+    const isRestaurantDetailPage = /^\/restaurants\/[^/]+$/.test(pathname);
+
+    // Only open if we're on a restaurant page and it's a new navigation (pathname changed)
+    if (isRestaurantDetailPage && pathname !== lastPathnameRef.current) {
+      openPanel();
+      lastPathnameRef.current = pathname;
+    } else if (!isRestaurantDetailPage) {
+      // Reset the ref when navigating away from restaurant pages
+      lastPathnameRef.current = "";
+    }
+  }, [pathname, openPanel]);
 
   return (
     <>
