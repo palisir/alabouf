@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# alabouf
+
+A restaurant discovery web application that displays favorite restaurants on an interactive map. "On a testé, on a aimé, on partage. Nos restos favoris sur une carte."
+
+Built with Next.js, TypeScript, Mapbox GL, and Contentful CMS.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Bun
+- A Contentful account and space
+- A Mapbox account and access token
+
+### Installation
+
+1. Clone the repository and install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Create a `.env.local` file in the root directory with the following environment variables:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+CONTENTFUL_SPACE_ID=your_contentful_space_id
+CONTENTFUL_ACCESS_TOKEN=your_contentful_access_token
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=your_mapbox_access_token
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Run the development server:
 
-## Learn More
+```bash
+bun run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Available Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `bun run dev` - Start the development server
+- `bun run build` - Build the production bundle
+- `bun run start` - Start the production server
+- `bun run lint` - Run ESLint
 
-## Deploy on Vercel
+## Todo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] Add mobile responsiveness
+- [ ] Add search/filter functionality for restaurants
+- [ ] Add social sharing functionality
