@@ -20,12 +20,10 @@ Built with Next.js, TypeScript, Mapbox GL, and Contentful CMS.
 bun install
 ```
 
-2. Create a `.env.local` file in the root directory with the following environment variables:
+2. Create `.env.local` from `.env.sample` in the root directory and fill all the env variables
 
-```env
-CONTENTFUL_SPACE_ID=your_contentful_space_id
-CONTENTFUL_ACCESS_TOKEN=your_contentful_access_token
-NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=your_mapbox_access_token
+```bash
+cp .env.local .env.sample
 ```
 
 3. Run the development server:

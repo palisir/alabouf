@@ -6,6 +6,7 @@
       "dependencies": {
         "@contentful/rich-text-react-renderer": "^16.1.5",
         "@contentful/rich-text-types": "^17.2.4",
+        "@formspree/react": "^2.5.5",
         "contentful": "^11.8.9",
         "mapbox-gl": "^3.16.0",
         "next": "16.0.1",
@@ -92,6 +93,10 @@
     "@eslint/object-schema": ["@eslint/object-schema@2.1.7", "", {}, "sha512-VtAOaymWVfZcmZbp6E2mympDIHvyjXs/12LqWYjVw6qjrfF+VK+fyG33kChz3nnK+SU5/NeHOqrTEHS8sXO3OA=="],
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.4.1", "", { "dependencies": { "@eslint/core": "^0.17.0", "levn": "^0.4.1" } }, "sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA=="],
+
+    "@formspree/core": ["@formspree/core@3.0.4", "", { "dependencies": { "@stripe/stripe-js": "^1.35.0" } }, "sha512-VpdvQfSbcD4smrk1Gb5RJPBYBWmiNVWkiZs6ddu7afnu/OjKGlIPVo42LNNS5ht2joabcTCiyOZgATjqOdqs+g=="],
+
+    "@formspree/react": ["@formspree/react@2.5.5", "", { "dependencies": { "@formspree/core": "^3.0.4", "@stripe/react-stripe-js": "^1.7.1", "@stripe/stripe-js": "^1.35.0" }, "peerDependencies": { "react": "^16.8 || ^17.0 || ^18.0", "react-dom": "^16.8 || ^17.0 || ^18.0" } }, "sha512-VmfFW2f/aSMu023Wt84xGlDquRjbbJbJWtTFie9RI70k/EuVJ41Noj1kGHtYVajry9B1pEMyAh4PovdcdCYAHQ=="],
 
     "@humanfs/core": ["@humanfs/core@0.19.1", "", {}, "sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA=="],
 
@@ -210,6 +215,10 @@
     "@rollup/rollup-linux-x64-gnu": ["@rollup/rollup-linux-x64-gnu@4.52.5", "", { "os": "linux", "cpu": "x64" }, "sha512-hXGLYpdhiNElzN770+H2nlx+jRog8TyynpTVzdlc6bndktjKWyZyiCsuDAlpd+j+W+WNqfcyAWz9HxxIGfZm1Q=="],
 
     "@rtsao/scc": ["@rtsao/scc@1.1.0", "", {}, "sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g=="],
+
+    "@stripe/react-stripe-js": ["@stripe/react-stripe-js@1.16.5", "", { "dependencies": { "prop-types": "^15.7.2" }, "peerDependencies": { "@stripe/stripe-js": "^1.44.1", "react": "^16.8.0 || ^17.0.0 || ^18.0.0", "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0" } }, "sha512-lVPW3IfwdacyS22pP+nBB6/GNFRRhT/4jfgAK6T2guQmtzPwJV1DogiGGaBNhiKtSY18+yS8KlHSu+PvZNclvQ=="],
+
+    "@stripe/stripe-js": ["@stripe/stripe-js@1.54.2", "", {}, "sha512-R1PwtDvUfs99cAjfuQ/WpwJ3c92+DAMy9xGApjqlWQMj0FKQabUAys2swfTRNzuYAYJh7NqK2dzcYVNkKLEKUg=="],
 
     "@swc/helpers": ["@swc/helpers@0.5.15", "", { "dependencies": { "tslib": "^2.8.0" } }, "sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g=="],
 

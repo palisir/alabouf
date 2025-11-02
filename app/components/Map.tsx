@@ -130,7 +130,7 @@ export default function Map({
         });
         const container = map.getContainer();
         const padding =
-          Math.min(container.offsetWidth, container.offsetHeight) * 0.3;
+          Math.min(container.offsetWidth, container.offsetHeight) * 0.05;
         map.fitBounds(bounds, { padding });
       }
 
