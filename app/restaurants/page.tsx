@@ -1,8 +1,17 @@
 import RestaurantList from "../components/RestaurantList";
 import { getRestaurants } from "@/lib/contentful/restaurants";
 
-export default async function RestaurantsPage() {
-  const { items: restaurants } = await getRestaurants();
+interface RestaurantsPageProps {
+  searchParams: Promise<{
+    tag?: string;
+  }>;
+}
 
-  return <RestaurantList restaurants={restaurants} />;
+export default async function RestaurantsPage({
+  searchParams,
+}: RestaurantsPageProps) {
+  const { items: restaurants } = await getRestaurants();
+  const { tag } = await searchParams;
+
+  return <RestaurantList restaurants={restaurants} filterTag={tag} />;
 }

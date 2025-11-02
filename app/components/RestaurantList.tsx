@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import type { Entry } from "contentful";
 import type { RestaurantSkeleton } from "@/lib/contentful/types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
@@ -8,20 +10,53 @@ import type { Document } from "@contentful/rich-text-types";
 
 interface RestaurantListProps {
   restaurants: Entry<RestaurantSkeleton, undefined, string>[];
+  filterTag?: string;
 }
 
-export default function RestaurantList({ restaurants }: RestaurantListProps) {
-  if (restaurants.length === 0) {
+export default function RestaurantList({
+  restaurants,
+  filterTag,
+}: RestaurantListProps) {
+  const router = useRouter();
+
+  const filteredRestaurants = useMemo(() => {
+    if (!filterTag) return restaurants;
+    return restaurants.filter((restaurant) =>
+      restaurant.fields.tags?.includes(filterTag)
+    );
+  }, [restaurants, filterTag]);
+
+  const handleTagClick = (tag: string) => {
+    router.push(`/restaurants?tag=${encodeURIComponent(tag)}`);
+  };
+
+  if (filteredRestaurants.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
-        <p>Aucun restaurant trouvé.</p>
+        <p>
+          {filterTag
+            ? `Aucun restaurant trouvé avec le tag "${filterTag}".`
+            : "Aucun restaurant trouvé."}
+        </p>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      {restaurants.map((restaurant) => {
+      {filterTag && (
+        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+          <p className="text-sm text-blue-800">
+            Filtre actif : <span className="font-semibold">{filterTag}</span>
+            {" · "}
+            <Link href="/restaurants" className="underline hover:text-blue-600">
+              Voir tous les restaurants
+            </Link>
+          </p>
+        </div>
+      )}
+
+      {filteredRestaurants.map((restaurant) => {
         const { name, slug, favorite, instagram, tags, review } =
           restaurant.fields;
 
@@ -50,12 +85,17 @@ export default function RestaurantList({ restaurants }: RestaurantListProps) {
             {tags && tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-3">
                 {tags.map((tag, index) => (
-                  <span
+                  <button
                     key={index}
-                    className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md"
+                    onClick={() => handleTagClick(tag)}
+                    className={`px-2 py-1 text-xs rounded-md transition-colors ${
+                      filterTag === tag
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
                   >
                     {tag}
-                  </span>
+                  </button>
                 ))}
               </div>
             )}
