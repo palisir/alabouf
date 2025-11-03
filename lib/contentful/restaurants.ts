@@ -1,10 +1,12 @@
 import { contentfulClient, LOCALE } from "./client";
 import type { RestaurantSkeleton } from "./types";
 
-export async function getRestaurants() {
+export async function getRestaurants(search?: string, tag?: string) {
   return contentfulClient.getEntries<RestaurantSkeleton>({
     content_type: "restaurant",
     locale: LOCALE,
+    ...(search && { query: search }),
+    ...(tag && { "fields.tags[in]": tag }),
   });
 }
 

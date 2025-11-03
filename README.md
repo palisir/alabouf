@@ -44,6 +44,7 @@ bun run dev
 ## Todo
 
 - [ ] Add mobile responsiveness
+- [ ] Decide what to do with the home page
 - [ ] Add search/filter functionality for restaurants
 - [ ] Add social sharing functionality
 - [ ] Add i18n

@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
 import type { Entry } from "contentful";
 import type { RestaurantSkeleton } from "@/lib/contentful/types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
@@ -19,18 +18,11 @@ export default function RestaurantList({
 }: RestaurantListProps) {
   const router = useRouter();
 
-  const filteredRestaurants = useMemo(() => {
-    if (!filterTag) return restaurants;
-    return restaurants.filter((restaurant) =>
-      restaurant.fields.tags?.includes(filterTag)
-    );
-  }, [restaurants, filterTag]);
-
   const handleTagClick = (tag: string) => {
     router.push(`/restaurants?tag=${encodeURIComponent(tag)}`);
   };
 
-  if (filteredRestaurants.length === 0) {
+  if (restaurants.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
         <p>
@@ -56,7 +48,7 @@ export default function RestaurantList({
         </div>
       )}
 
-      {filteredRestaurants.map((restaurant) => {
+      {restaurants.map((restaurant) => {
         const { name, slug, favorite, instagram, tags, review } =
           restaurant.fields;
 
@@ -88,11 +80,10 @@ export default function RestaurantList({
                   <button
                     key={index}
                     onClick={() => handleTagClick(tag)}
-                    className={`px-2 py-1 text-xs rounded-md transition-colors ${
-                      filterTag === tag
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                    className={`px-2 py-1 text-xs rounded-md transition-colors ${filterTag === tag
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
                   >
                     {tag}
                   </button>
@@ -114,7 +105,7 @@ export default function RestaurantList({
             )}
 
             {review && (
-              <div className="text-sm text-gray-700 mt-3 prose prose-sm max-w-none">
+              <div className="text-sm mt-3 prose prose-sm max-w-none">
                 {documentToReactComponents(review as Document)}
               </div>
             )}

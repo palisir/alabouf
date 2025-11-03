@@ -49,7 +49,7 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
             {tags.map((tag, index) => (
               <span
                 key={index}
-                className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md"
+                className="px-2 py-1 text-xs rounded-md"
               >
                 {tag}
               </span>
@@ -71,7 +71,7 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
         )}
 
         {review && (
-          <div className="text-sm text-gray-700 mt-4 prose prose-sm max-w-none">
+          <div className="text-sm mt-4 prose prose-sm max-w-none">
             {documentToReactComponents(review as Document)}
           </div>
         )}

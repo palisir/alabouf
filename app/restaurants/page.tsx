@@ -11,8 +11,8 @@ interface RestaurantsPageProps {
 export default async function RestaurantsPage({
   searchParams,
 }: RestaurantsPageProps) {
-  const { items: restaurants } = await getRestaurants();
   const { tag } = await searchParams;
+  const { items: restaurants } = await getRestaurants(undefined, tag);
 
   return (
     <>
