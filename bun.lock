@@ -4,6 +4,7 @@
     "": {
       "name": "alabouf-next",
       "dependencies": {
+        "@contentful/rich-text-plain-text-renderer": "^17.1.5",
         "@contentful/rich-text-react-renderer": "^16.1.5",
         "@contentful/rich-text-types": "^17.2.4",
         "@formspree/react": "^2.5.5",
@@ -66,6 +67,8 @@
     "@babel/types": ["@babel/types@7.28.5", "", { "dependencies": { "@babel/helper-string-parser": "^7.27.1", "@babel/helper-validator-identifier": "^7.28.5" } }, "sha512-qQ5m48eI/MFLQ5PxQj4PFaprjyCTLI37ElWMmNs0K8Lk3dVeOdNpB3ks8jc7yM5CDmVC73eMVk/trk3fgmrUpA=="],
 
     "@contentful/content-source-maps": ["@contentful/content-source-maps@0.11.39", "", { "dependencies": { "@vercel/stega": "^0.1.2", "json-pointer": "^0.6.2" } }, "sha512-fVhvAubuQRID3NeMJI11NXXMnOaLUDJ+yuqlyfJynfsFfvT2PNmiRzThgumjNuaSP344SceRzZPsonVzxI4qzg=="],
+
+    "@contentful/rich-text-plain-text-renderer": ["@contentful/rich-text-plain-text-renderer@17.1.5", "", { "dependencies": { "@contentful/rich-text-types": "^17.2.4" } }, "sha512-N3IX2k5Zs93PaI6nnVjCRk+vqfbc1uuYofAnRsniTa3gTj1fkf0FtdjYJOkWsBZjJxhT9y3RI2d9FoLT+a97dQ=="],
 
     "@contentful/rich-text-react-renderer": ["@contentful/rich-text-react-renderer@16.1.5", "", { "dependencies": { "@contentful/rich-text-types": "^17.2.4" }, "peerDependencies": { "react": "^16.8.6 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom": "^16.8.6 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-5iGG70YVH1f0zcsG7zKOCHdF5zHo38dpCXdAw5gjPpJkI5MTI200KUKU+q0B55Bdp4PzFQr6EcTSUI+k6jluyw=="],
 

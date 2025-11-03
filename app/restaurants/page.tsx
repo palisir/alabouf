@@ -5,14 +5,15 @@ import { getRestaurants } from "@/lib/contentful/restaurants";
 interface RestaurantsPageProps {
   searchParams: Promise<{
     tag?: string;
+    search?: string;
   }>;
 }
 
 export default async function RestaurantsPage({
   searchParams,
 }: RestaurantsPageProps) {
-  const { tag } = await searchParams;
-  const { items: restaurants } = await getRestaurants(undefined, tag);
+  const { tag, search } = await searchParams;
+  const { items: restaurants } = await getRestaurants(search, tag);
 
   return (
     <>
@@ -24,7 +25,7 @@ export default async function RestaurantsPage({
           ← Retour à l&apos;accueil
         </Link>
       </div>
-      <RestaurantList restaurants={restaurants} filterTag={tag} />
+      <RestaurantList restaurants={restaurants} filterTag={tag} searchQuery={search} />
     </>
   );
 }

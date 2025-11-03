@@ -2,116 +2,99 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import type { Entry } from "contentful";
 import type { RestaurantSkeleton } from "@/lib/contentful/types";
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import type { Document } from "@contentful/rich-text-types";
+import RestaurantListItem from "./RestaurantListItem";
 
 interface RestaurantListProps {
   restaurants: Entry<RestaurantSkeleton, undefined, string>[];
   filterTag?: string;
+  searchQuery?: string;
 }
 
 export default function RestaurantList({
   restaurants,
   filterTag,
+  searchQuery,
 }: RestaurantListProps) {
   const router = useRouter();
+  const [searchInput, setSearchInput] = useState(searchQuery || "");
 
   const handleTagClick = (tag: string) => {
     router.push(`/restaurants?tag=${encodeURIComponent(tag)}`);
   };
 
-  if (restaurants.length === 0) {
-    return (
-      <div className="text-center py-8 text-gray-500">
-        <p>
-          {filterTag
-            ? `Aucun restaurant trouvé avec le tag "${filterTag}".`
-            : "Aucun restaurant trouvé."}
-        </p>
-      </div>
-    );
-  }
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (searchInput) params.set("search", searchInput);
+    if (filterTag) params.set("tag", filterTag);
+    router.push(`/restaurants${params.toString() ? `?${params.toString()}` : ""}`);
+  };
 
   return (
     <div className="space-y-6">
-      {filterTag && (
-        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-          <p className="text-sm text-blue-800">
-            Filtre actif : <span className="font-semibold">{filterTag}</span>
-            {" · "}
-            <Link href="/restaurants" className="underline hover:text-blue-600">
-              Voir tous les restaurants
-            </Link>
+      <form onSubmit={handleSearch} className="mb-6">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Rechercher un restaurant..."
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Rechercher
+          </button>
+        </div>
+      </form>
+
+      {restaurants.length === 0 ? (
+        <div className="text-center py-8 text-gray-500">
+          <p>
+            {searchQuery || filterTag
+              ? "Aucun restaurant trouvé avec ces filtres."
+              : "Aucun restaurant trouvé."}
           </p>
         </div>
-      )}
-
-      {restaurants.map((restaurant) => {
-        const { name, slug, favorite, instagram, tags, review } =
-          restaurant.fields;
-
-        return (
-          <article
-            key={restaurant.sys.id}
-            className="border-b border-gray-200 pb-6 last:border-b-0"
-          >
-            <div className="flex items-start justify-between gap-3 mb-2">
-              <Link href={`/restaurants/${slug}`}>
-                <h3 className="text-xl font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">
-                  {name}
-                </h3>
-              </Link>
-              {favorite && (
-                <span
-                  className="flex-shrink-0 text-red-500 text-sm font-medium"
-                  title="Favori"
-                  aria-label="Restaurant favori"
-                >
-                  ♥
-                </span>
-              )}
+      ) : (
+        <>
+          {(filterTag || searchQuery) && (
+            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+              <p className="text-sm text-blue-800">
+                {searchQuery && (
+                  <>
+                    Recherche : <span className="font-semibold">{searchQuery}</span>
+                  </>
+                )}
+                {searchQuery && filterTag && " · "}
+                {filterTag && (
+                  <>
+                    Filtre : <span className="font-semibold">{filterTag}</span>
+                  </>
+                )}
+                {" · "}
+                <Link href="/restaurants" className="underline hover:text-blue-600">
+                  Voir tous les restaurants
+                </Link>
+              </p>
             </div>
+          )}
 
-            {tags && tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-3">
-                {tags.map((tag, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleTagClick(tag)}
-                    className={`px-2 py-1 text-xs rounded-md transition-colors ${filterTag === tag
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                      }`}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {instagram && (
-              <div className="mb-3">
-                <a
-                  href={instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
-                >
-                  {instagram}
-                </a>
-              </div>
-            )}
-
-            {review && (
-              <div className="text-sm mt-3 prose prose-sm max-w-none">
-                {documentToReactComponents(review as Document)}
-              </div>
-            )}
-          </article>
-        );
-      })}
+          {restaurants.map((restaurant) => (
+            <RestaurantListItem
+              key={restaurant.sys.id}
+              restaurant={restaurant}
+              filterTag={filterTag}
+              onTagClick={handleTagClick}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 }
