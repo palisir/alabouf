@@ -34,7 +34,7 @@ export default function RestaurantList({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col h-full">
       <form onSubmit={handleSearch} className="mb-6">
         <div className="flex gap-2">
           <input
@@ -53,48 +53,50 @@ export default function RestaurantList({
         </div>
       </form>
 
-      {restaurants.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
-          <p>
-            {searchQuery || filterTag
-              ? "Aucun restaurant trouvé avec ces filtres."
-              : "Aucun restaurant trouvé."}
+      {(filterTag || searchQuery) && restaurants.length > 0 && (
+        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+          <p className="text-sm text-blue-800">
+            {searchQuery && (
+              <>
+                Recherche : <span className="font-semibold">{searchQuery}</span>
+              </>
+            )}
+            {searchQuery && filterTag && " · "}
+            {filterTag && (
+              <>
+                Filtre : <span className="font-semibold">{filterTag}</span>
+              </>
+            )}
+            {" · "}
+            <Link href="/restaurants" className="underline hover:text-blue-600">
+              Voir tous les restaurants
+            </Link>
           </p>
         </div>
-      ) : (
-        <>
-          {(filterTag || searchQuery) && (
-            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-              <p className="text-sm text-blue-800">
-                {searchQuery && (
-                  <>
-                    Recherche : <span className="font-semibold">{searchQuery}</span>
-                  </>
-                )}
-                {searchQuery && filterTag && " · "}
-                {filterTag && (
-                  <>
-                    Filtre : <span className="font-semibold">{filterTag}</span>
-                  </>
-                )}
-                {" · "}
-                <Link href="/restaurants" className="underline hover:text-blue-600">
-                  Voir tous les restaurants
-                </Link>
-              </p>
-            </div>
-          )}
-
-          {restaurants.map((restaurant) => (
-            <RestaurantListItem
-              key={restaurant.sys.id}
-              restaurant={restaurant}
-              filterTag={filterTag}
-              onTagClick={handleTagClick}
-            />
-          ))}
-        </>
       )}
+
+      <div className="flex-1 overflow-y-auto space-y-6">
+        {restaurants.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            <p>
+              {searchQuery || filterTag
+                ? "Aucun restaurant trouvé avec ces filtres."
+                : "Aucun restaurant trouvé."}
+            </p>
+          </div>
+        ) : (
+          <>
+            {restaurants.map((restaurant) => (
+              <RestaurantListItem
+                key={restaurant.sys.id}
+                restaurant={restaurant}
+                filterTag={filterTag}
+                onTagClick={handleTagClick}
+              />
+            ))}
+          </>
+        )}
+      </div>
     </div>
   );
 }
