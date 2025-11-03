@@ -7,10 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "prepare": "husky"
+    "prepare": "husky",
+    "downcase-tags": "bun run scripts/downcase-restaurant-tags.ts",
+    "downcase-tags:dry": "DRY_RUN=true bun run scripts/downcase-restaurant-tags.ts"
   },
   "lint-staged": {
-    "*.{ts,tsx}": ["eslint --fix"]
+    "*.{ts,tsx}": [
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^16.1.5",
@@ -27,6 +31,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "contentful-management": "^11.62.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
     "husky": "^9.1.7",
