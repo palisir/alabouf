@@ -44,6 +44,7 @@ export default function Map({
       container: mapContainerRef.current,
       style,
       zoom,
+      collectResourceTiming: false, // Disable telemetry data collection
     });
 
     mapRef.current = map;

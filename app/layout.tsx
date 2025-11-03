@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { PanelProvider } from "./components/PanelContext";
 import Map from "./components/Map";
@@ -26,6 +27,13 @@ export default async function RootLayout({
       data-darkreader-scheme="dark"
     >
       <body className="m-0 p-0 antialiased">
+        {process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
+          <Script
+            src="https://umami.is/script.js"
+            data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+            strategy="afterInteractive"
+          />
+        )}
         <PanelProvider>
           <Map restaurants={restaurants} />
           <PanelWithContent>{children}</PanelWithContent>
