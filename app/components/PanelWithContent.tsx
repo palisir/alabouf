@@ -33,24 +33,52 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
   return (
     <>
       <PanelToggleButton isOpen={isOpen} onClick={togglePanel} />
+      
+      {/* Backdrop overlay for mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300"
+          onClick={togglePanel}
+          aria-hidden="true"
+        />
+      )}
+      
+      {/* Panel: bottom sheet on mobile, side panel on desktop */}
       <div
-        className={`fixed top-0 left-0 h-full w-[33vw] max-w-[50vw] bg-white dark:bg-gray-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 overflow-hidden ${isOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed bg-white dark:bg-gray-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 overflow-hidden
+          /* Mobile: bottom sheet */
+          bottom-0 left-0 right-0 h-[85vh] max-h-[85vh] rounded-t-2xl
+          /* Desktop: side panel */
+          md:top-0 md:left-0 md:right-auto md:bottom-auto md:h-full md:w-[33vw] md:max-w-[50vw] md:rounded-none
+          ${isOpen ? "translate-y-0 md:translate-x-0" : "translate-y-full md:-translate-x-full"}
+        `}
       >
         {/* Panel header */}
-        <div className="py-7">
-          <h2 className="text-2xl text-right mr-10">alabouf</h2>
+        <div className="py-6 md:py-8 px-6 md:px-10 border-b border-gray-100 dark:border-gray-700">
+          <h2 className="text-2xl md:text-2xl font-semibold text-right text-gray-900 dark:text-gray-100">
+            alabouf
+          </h2>
         </div>
 
         {/* Panel content */}
-        <div className="flex flex-col h-[calc(100%-80px)]">
-          <div className="flex-1 p-6 overflow-hidden">
+        <div className="flex flex-col h-[calc(100%-120px)] md:h-[calc(100%-100px)]">
+          <div className="flex-1 p-6 md:p-8 overflow-y-auto">
             {children}
           </div>
-          <div className="p-6 pt-0 text-center space-x-4">
-            <Link href="/contact">contact</Link>
-            <span>•</span>
-            <Link href="/mentions-legales">mentions légales</Link>
+          <div className="px-6 md:px-8 pb-6 md:pb-8 pt-4 text-center text-sm text-gray-600 dark:text-gray-400 space-x-4 border-t border-gray-100 dark:border-gray-700">
+            <Link 
+              href="/contact" 
+              className="hover:text-[var(--color-primary)] transition-colors duration-200"
+            >
+              contact
+            </Link>
+            <span className="text-gray-400 dark:text-gray-500">•</span>
+            <Link 
+              href="/mentions-legales" 
+              className="hover:text-[var(--color-primary)] transition-colors duration-200"
+            >
+              mentions légales
+            </Link>
           </div>
         </div>
       </div>
