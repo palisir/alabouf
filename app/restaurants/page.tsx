@@ -17,10 +17,10 @@ export default async function RestaurantsPage({
 
   return (
     <>
-      <div className="mb-4">
+      <div className="mb-6">
         <Link
           href="/"
-          className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+          className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] dark:hover:text-[var(--color-primary-light)] hover:underline transition-colors duration-200 inline-flex items-center gap-1"
         >
           ← Retour à l&apos;accueil
         </Link>
