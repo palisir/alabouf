@@ -33,11 +33,10 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
   return (
     <>
       <PanelToggleButton isOpen={isOpen} onClick={togglePanel} />
-      
-      {/* Logo - always visible in top right, aligned with button */}
+
       <div 
-        style={{ right: '1rem', left: 'auto', textShadow: '0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2)' }}
-        className="fixed top-4 z-[60] h-12 flex items-center leading-[48px] text-xl font-semibold text-white"
+        style={{ top: '.75rem',right: '1rem', left: 'auto', textShadow: '0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2)' }}
+        className="fixed z-60 h-12 flex items-center leading-[48px] text-xl font-semibold text-white"
       >
         alabouf
       </div>
