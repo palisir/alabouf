@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { PanelProvider } from "./components/PanelContext";
 import Map from "./components/Map";
 import PanelWithContent from "./components/PanelWithContent";
 import { getRestaurants } from "@/lib/contentful/restaurants";
+
+const poppins = Poppins({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-poppins",
+});
 
 export const metadata: Metadata = {
   title: "alabouf",
@@ -26,7 +34,7 @@ export default async function RootLayout({
       data-darkreader-mode="dynamic"
       data-darkreader-scheme="dark"
     >
-      <body className="m-0 p-0 antialiased">
+      <body className={`${poppins.variable} m-0 p-0 antialiased font-sans`}>
         {process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
           <Script
             src="https://umami.is/script.js"
