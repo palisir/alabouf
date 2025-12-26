@@ -46,3 +46,5 @@ bun run dev
 - Add i18n
 - Add half-height card for single restaurant page on mobile
 - Fix line break for Contenful long text (i.e. restaurant review)
+- User geolocation
+- Marker style on the map
