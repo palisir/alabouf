@@ -28,16 +28,16 @@ export default function RestaurantListItem({
     : null;
 
   return (
-    <article className="border-b border-gray-200 pb-6 last:border-b-0">
-      <div className="flex items-start justify-between gap-3 mb-2">
+    <article className="border-b border-gray-200 dark:border-gray-700 pb-6 last:border-b-0">
+      <div className="flex items-start justify-between gap-3 mb-3">
         <Link href={`/restaurants/${slug}`}>
-          <h3 className="text-xl font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer">
             {name}
           </h3>
         </Link>
         {favorite && (
           <span
-            className="flex-shrink-0 text-red-500 text-sm font-medium"
+            className="flex-shrink-0 text-[var(--color-primary)] text-lg font-medium"
             title="Favori"
             aria-label="Restaurant favori"
           >
@@ -47,15 +47,16 @@ export default function RestaurantListItem({
       </div>
 
       {tags && tags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-3">
+        <div className="flex flex-wrap gap-2 mb-4">
           {tags.map((tag, index) => (
             <button
               key={index}
               onClick={() => onTagClick(tag)}
-              className={`px-2 py-1 text-xs rounded-md transition-colors ${filterTag === tag
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors duration-200 ${
+                filterTag === tag
+                  ? "bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-dark)]"
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+              }`}
             >
               {tag}
             </button>
@@ -64,12 +65,12 @@ export default function RestaurantListItem({
       )}
 
       {instagram && (
-        <div className="mb-3">
+        <div className="mb-4">
           <a
             href={instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+            className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] dark:hover:text-[var(--color-primary-light)] hover:underline transition-colors duration-200"
           >
             {instagram}
           </a>
@@ -77,7 +78,7 @@ export default function RestaurantListItem({
       )}
 
       {reviewExcerpt && (
-        <div className="text-sm mt-3 text-gray-600">
+        <div className="text-sm mt-4 text-gray-600 dark:text-gray-400 leading-relaxed">
           {reviewExcerpt}
         </div>
       )}
