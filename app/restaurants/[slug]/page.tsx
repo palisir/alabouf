@@ -25,14 +25,14 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
       <div className="mb-6">
         <Link
           href="/restaurants"
-          className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] dark:hover:text-[var(--color-primary-light)] hover:underline transition-colors duration-200 inline-flex items-center gap-1"
+          className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] hover:underline transition-colors duration-200 inline-flex items-center gap-1"
         >
           ← Retour à la liste des restaurants
         </Link>
       </div>
       <article>
         <div className="flex items-start justify-between gap-3 mb-6">
-          <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-gray-100 leading-tight">
+          <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 leading-tight">
             {name}
           </h2>
           {favorite && (
@@ -51,7 +51,7 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
             {tags.map((tag, index) => (
               <span
                 key={index}
-                className="px-3 py-1.5 text-xs font-medium rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+                className="px-3 py-1.5 text-xs font-medium rounded-lg bg-gray-100 text-gray-700"
               >
                 {tag}
               </span>
@@ -65,7 +65,7 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
               href={instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] dark:hover:text-[var(--color-primary-light)] hover:underline transition-colors duration-200"
+              className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] hover:underline transition-colors duration-200"
             >
               {instagram}
             </a>
@@ -73,7 +73,7 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
         )}
 
         {review && (
-          <div className="mt-6 prose prose-sm md:prose-base max-w-none dark:prose-invert prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-[var(--color-primary)] prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 dark:prose-strong:text-gray-100">
+          <div className="mt-6 prose prose-sm md:prose-base max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-[var(--color-primary)] prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900">
             {documentToReactComponents(review as Document)}
           </div>
         )}

@@ -28,10 +28,10 @@ export default function RestaurantListItem({
     : null;
 
   return (
-    <article className="border-b border-gray-200 dark:border-gray-700 pb-6 last:border-b-0 overflow-hidden">
+    <article className="border-b border-gray-200 pb-6 last:border-b-0 overflow-hidden">
       <div className="flex items-start justify-between gap-3 mb-3 min-w-0">
         <Link href={`/restaurants/${slug}`} className="min-w-0 flex-1">
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer break-words">
+          <h3 className="text-xl font-semibold text-gray-900 hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer break-words">
             {name}
           </h3>
         </Link>
@@ -55,7 +55,7 @@ export default function RestaurantListItem({
               className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors duration-200 ${
                 filterTag === tag
                   ? "bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-dark)]"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               {tag}
@@ -70,7 +70,7 @@ export default function RestaurantListItem({
             href={instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] dark:hover:text-[var(--color-primary-light)] hover:underline transition-colors duration-200 break-all"
+            className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] hover:underline transition-colors duration-200 break-all"
           >
             {instagram}
           </a>
@@ -78,7 +78,7 @@ export default function RestaurantListItem({
       )}
 
       {reviewExcerpt && (
-        <div className="text-sm mt-4 text-gray-600 dark:text-gray-400 leading-relaxed break-words overflow-hidden">
+        <div className="text-sm mt-4 text-gray-600 leading-relaxed break-words overflow-hidden">
           {reviewExcerpt}
         </div>
       )}

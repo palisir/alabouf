@@ -42,7 +42,7 @@ export default function RestaurantList({
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Rechercher un restaurant..."
-            className="flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all"
+            className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all"
           />
           <button
             type="submit"
@@ -54,21 +54,21 @@ export default function RestaurantList({
       </form>
 
       {(filterTag || searchQuery) && restaurants.length > 0 && (
-        <div className="mb-6 p-4 bg-[var(--color-primary-light)]/30 dark:bg-[var(--color-primary-dark)]/20 border border-[var(--color-primary-muted)]/40 dark:border-[var(--color-primary-muted)]/30 rounded-lg">
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+        <div className="mb-6 p-4 bg-[var(--color-primary-light)]/30 border border-[var(--color-primary-muted)]/40 rounded-lg">
+          <p className="text-sm text-gray-700">
             {searchQuery && (
               <>
-                Recherche : <span className="font-semibold text-[var(--color-primary-dark)] dark:text-[var(--color-primary)]">{searchQuery}</span>
+                Recherche : <span className="font-semibold text-[var(--color-primary-dark)]">{searchQuery}</span>
               </>
             )}
             {searchQuery && filterTag && " · "}
             {filterTag && (
               <>
-                Filtre : <span className="font-semibold text-[var(--color-primary-dark)] dark:text-[var(--color-primary)]">{filterTag}</span>
+                Filtre : <span className="font-semibold text-[var(--color-primary-dark)]">{filterTag}</span>
               </>
             )}
             {" · "}
-            <Link href="/restaurants" className="underline hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary-light)] transition-colors">
+            <Link href="/restaurants" className="underline hover:text-[var(--color-primary)] transition-colors">
               Voir tous les restaurants
             </Link>
           </p>
@@ -77,7 +77,7 @@ export default function RestaurantList({
 
       <div className="flex-1 space-y-6">
         {restaurants.length === 0 ? (
-          <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+          <div className="text-center py-12 text-gray-500">
             <p className="text-base">
               {searchQuery || filterTag
                 ? "Aucun restaurant trouvé avec ces filtres."

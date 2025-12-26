@@ -31,8 +31,6 @@ export default async function RootLayout({
     <html
       lang="en"
       className="m-0 p-0"
-      data-darkreader-mode="dynamic"
-      data-darkreader-scheme="dark"
     >
       <body className={`${poppins.variable} m-0 p-0 antialiased font-sans`}>
         {process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (

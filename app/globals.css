@@ -16,19 +16,6 @@
   --toggle-button-top: 1rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    
-    /* Slightly adjust primary color for dark mode (slightly brighter for better visibility) */
-    --color-primary: #E07A5F;
-    --color-primary-light: #F5C4B0;
-    --color-primary-dark: #C85D3F;
-    --color-primary-muted: #E8A082;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);

@@ -169,7 +169,7 @@ export default function Map({
         const tagsArray = Array.isArray(tags) ? tags : [];
         const tagsHtml =
           tagsArray.length > 0
-            ? `<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${tagsArray.join(", ")}</p>`
+            ? `<p class="text-sm text-gray-600 mt-1">${tagsArray.join(", ")}</p>`
             : "";
 
         const instagramHtml = instagram
@@ -181,7 +181,7 @@ export default function Map({
           .setHTML(
             `
             <div class="p-3">
-              <h3 class="font-semibold text-lg text-gray-900 dark:text-gray-100">${name}</h3>
+              <h3 class="font-semibold text-lg text-gray-900">${name}</h3>
               ${tagsHtml}
               ${instagramHtml}
             </div>

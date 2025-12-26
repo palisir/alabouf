@@ -55,7 +55,7 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
       <div
       // explicitly set top to 5rem because of how safari handles position: fixed
         style={{ top: "5rem" }}
-        className={`fixed bg-white dark:bg-gray-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 overflow-hidden flex flex-col
+        className={`fixed bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 overflow-hidden flex flex-col
           /* Mobile: bottom sheet */
           bottom-0 left-0 right-0 rounded-t-2xl
           /* Desktop: side panel */
@@ -69,14 +69,14 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
         </div>
 
         {/* Footer */}
-        <div className="px-6 md:px-8 pb-6 md:pb-8 pt-4 text-center text-sm text-gray-600 dark:text-gray-400 space-x-4 border-t border-gray-100 dark:border-gray-700 flex-shrink-0">
+        <div className="px-6 md:px-8 pb-6 md:pb-8 pt-4 text-center text-sm text-gray-600 space-x-4 border-t border-gray-100 flex-shrink-0">
           <Link 
             href="/contact" 
             className="hover:text-[var(--color-primary)] transition-colors duration-200"
           >
             contact
           </Link>
-          <span className="text-gray-400 dark:text-gray-500">•</span>
+          <span className="text-gray-400">•</span>
           <Link 
             href="/mentions-legales" 
             className="hover:text-[var(--color-primary)] transition-colors duration-200"
