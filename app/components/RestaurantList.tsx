@@ -75,7 +75,7 @@ export default function RestaurantList({
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto space-y-6">
+      <div className="flex-1 space-y-6">
         {restaurants.length === 0 ? (
           <div className="text-center py-12 text-gray-500 dark:text-gray-400">
             <p className="text-base">

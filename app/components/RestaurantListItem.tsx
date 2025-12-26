@@ -28,10 +28,10 @@ export default function RestaurantListItem({
     : null;
 
   return (
-    <article className="border-b border-gray-200 dark:border-gray-700 pb-6 last:border-b-0">
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <Link href={`/restaurants/${slug}`}>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer">
+    <article className="border-b border-gray-200 dark:border-gray-700 pb-6 last:border-b-0 overflow-hidden">
+      <div className="flex items-start justify-between gap-3 mb-3 min-w-0">
+        <Link href={`/restaurants/${slug}`} className="min-w-0 flex-1">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer break-words">
             {name}
           </h3>
         </Link>
@@ -65,12 +65,12 @@ export default function RestaurantListItem({
       )}
 
       {instagram && (
-        <div className="mb-4">
+        <div className="mb-4 overflow-hidden">
           <a
             href={instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] dark:hover:text-[var(--color-primary-light)] hover:underline transition-colors duration-200"
+            className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] dark:hover:text-[var(--color-primary-light)] hover:underline transition-colors duration-200 break-all"
           >
             {instagram}
           </a>
@@ -78,7 +78,7 @@ export default function RestaurantListItem({
       )}
 
       {reviewExcerpt && (
-        <div className="text-sm mt-4 text-gray-600 dark:text-gray-400 leading-relaxed">
+        <div className="text-sm mt-4 text-gray-600 dark:text-gray-400 leading-relaxed break-words overflow-hidden">
           {reviewExcerpt}
         </div>
       )}

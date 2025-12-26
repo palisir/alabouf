@@ -49,7 +49,7 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
           /* Mobile: bottom sheet */
           bottom-0 left-0 right-0 h-[85vh] max-h-[85vh] rounded-t-2xl
           /* Desktop: side panel */
-          md:top-0 md:left-0 md:right-auto md:bottom-auto md:h-full md:w-[33vw] md:max-w-[50vw] md:rounded-none
+          md:top-0 md:left-0 md:right-auto md:bottom-auto md:h-screen md:max-h-none md:w-[33vw] md:max-w-[50vw] md:rounded-none
           ${isOpen ? "translate-y-0 md:translate-x-0" : "translate-y-full md:-translate-x-full"}
         `}
       >
