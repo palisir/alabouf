@@ -35,16 +35,14 @@ bun run dev
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Available Scripts
-
 - `bun run dev` - Start the development server
 - `bun run build` - Build the production bundle
 - `bun run start` - Start the production server
 - `bun run lint` - Run ESLint
 
 ## Todo
-
-- [ ] Add mobile responsiveness
-- [ ] Decide what to do with the home page
-- [ ] Add search/filter functionality for restaurants
-- [ ] Add social sharing functionality
-- [ ] Add i18n
+- Decide what to do with the home page
+- Add social sharing feature
+- Add i18n
+- Add half-height card for single restaurant page on mobile
+- Fix line break for Contenful long text (i.e. restaurant review)
