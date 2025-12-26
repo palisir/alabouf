@@ -34,6 +34,14 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
     <>
       <PanelToggleButton isOpen={isOpen} onClick={togglePanel} />
       
+      {/* Logo - always visible in top right, aligned with button */}
+      <div 
+        style={{ right: '1rem', left: 'auto' }}
+        className="fixed top-4 z-[60] h-12 flex items-center leading-[48px] text-xl font-semibold text-white"
+      >
+        alabouf
+      </div>
+      
       {/* Backdrop overlay for mobile */}
       {isOpen && (
         <div
@@ -55,13 +63,6 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
           ${isOpen ? "translate-y-0 md:translate-x-0" : "translate-y-full md:-translate-x-full"}
         `}
       >
-        {/* Panel header */}
-        <div className="py-6 md:py-8 px-6 md:px-10 border-b border-gray-100 dark:border-gray-700 flex-shrink-0">
-          <h2 className="text-2xl md:text-2xl font-semibold text-right text-gray-900 dark:text-gray-100">
-            alabouf
-          </h2>
-        </div>
-
         {/* Panel content */}
         <div className="flex-1 p-6 md:p-8 overflow-y-auto min-h-0">
           {children}
