@@ -169,19 +169,19 @@ export default function Map({
         const tagsArray = Array.isArray(tags) ? tags : [];
         const tagsHtml =
           tagsArray.length > 0
-            ? `<p class="text-sm text-gray-600">${tagsArray.join(", ")}</p>`
+            ? `<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${tagsArray.join(", ")}</p>`
             : "";
 
         const instagramHtml = instagram
-          ? `<a href="https://instagram.com/${instagram}" target="_blank" rel="noopener noreferrer" class="text-sm text-blue-600 hover:underline">@${instagram}</a>`
+          ? `<a href="https://instagram.com/${instagram}" target="_blank" rel="noopener noreferrer" class="text-sm hover:underline mt-2 inline-block transition-colors" style="color: #D97757;">@${instagram}</a>`
           : "";
 
         new mapboxgl.Popup()
           .setLngLat(coordinates)
           .setHTML(
             `
-            <div class="p-2">
-              <h3 class="font-bold text-lg">${name}</h3>
+            <div class="p-3">
+              <h3 class="font-semibold text-lg text-gray-900 dark:text-gray-100">${name}</h3>
               ${tagsHtml}
               ${instagramHtml}
             </div>
