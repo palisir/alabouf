@@ -10,6 +10,10 @@
   --color-primary-light: #F5C4B0;
   --color-primary-dark: #B85D3F;
   --color-primary-muted: #E8A082;
+  
+  /* Toggle button layout */
+  --toggle-button-size: 3rem;
+  --toggle-button-top: 1rem;
 }
 
 @media (prefers-color-scheme: dark) {

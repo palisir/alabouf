@@ -45,11 +45,13 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
       
       {/* Panel: bottom sheet on mobile, side panel on desktop */}
       <div
+      // explicitly set top to 5rem because of how safari handles position: fixed
+        style={{ top: "5rem" }}
         className={`fixed bg-white dark:bg-gray-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 overflow-hidden flex flex-col
           /* Mobile: bottom sheet */
-          bottom-0 left-0 right-0 h-[85vh] max-h-[85vh] rounded-t-2xl
+          bottom-0 left-0 right-0 rounded-t-2xl
           /* Desktop: side panel */
-          md:top-0 md:left-0 md:right-auto md:bottom-auto md:h-screen md:max-h-none md:w-[33vw] md:max-w-[50vw] md:rounded-none
+          md:top-0! md:left-0 md:right-auto md:bottom-auto md:h-screen md:max-h-none md:w-[33vw] md:max-w-[50vw] md:rounded-none
           ${isOpen ? "translate-y-0 md:translate-x-0" : "translate-y-full md:-translate-x-full"}
         `}
       >

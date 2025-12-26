@@ -12,7 +12,7 @@ export default function PanelToggleButton({
   return (
     <button
       onClick={onClick}
-      className="fixed top-4 left-4 md:top-4 md:left-4 z-[100] w-12 h-12 md:w-12 md:h-12 flex items-center justify-center bg-white dark:bg-gray-800 rounded-full shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+      className="fixed top-4 left-4 z-[100] w-12 h-12 flex items-center justify-center bg-white dark:bg-gray-800 rounded-full shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 dark:focus:ring-offset-gray-900"
       aria-label={isOpen ? "Close panel" : "Open panel"}
       aria-expanded={isOpen}
     >
