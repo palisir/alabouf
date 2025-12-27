@@ -35,3 +35,4 @@ The generation script creates the following icons:
 - The PWA manifest is located at `public/manifest.json`
 - Maskable icons have 10% padding to ensure content fits within the safe zone
 
+

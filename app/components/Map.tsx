@@ -50,55 +50,90 @@ export default function Map({
     mapRef.current = map;
 
     map.on("load", () => {
-      // Convert restaurants to GeoJSON format (most efficient for Mapbox)
-      const geojson: GeoJSON.FeatureCollection<GeoJSON.Point> = {
-        type: "FeatureCollection",
-        features: restaurants
-          .filter((restaurant) => restaurant.fields.location)
-          .map((restaurant) => ({
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: [
-                restaurant.fields.location!.lon,
-                restaurant.fields.location!.lat,
-              ],
-            },
-            properties: {
-              id: restaurant.sys.id,
-              slug: restaurant.fields.slug,
-              name: restaurant.fields.name,
-              favorite: restaurant.fields.favorite || false,
-              instagram: restaurant.fields.instagram,
-              tags: restaurant.fields.tags || [],
-            },
-          })),
-      };
+      // Load custom marker images (PNG for better performance)
+      Promise.all([
+        new Promise<void>((resolve, reject) => {
+          map.loadImage("/markers/marker-regular.png", (error, image) => {
+            if (error) {
+              console.warn("Regular marker not found, using fallback:", error);
+              resolve(); // Continue even if marker is missing
+            } else if (image) {
+              map.addImage("marker-regular", image);
+              resolve();
+            }
+          });
+        }),
+        new Promise<void>((resolve, reject) => {
+          map.loadImage("/markers/marker-favorite.png", (error, image) => {
+            if (error) {
+              console.warn("Favorite marker not found, using fallback:", error);
+              resolve(); // Continue even if marker is missing
+            } else if (image) {
+              map.addImage("marker-favorite", image);
+              resolve();
+            }
+          });
+        }),
+      ]).then(() => {
+        // Convert restaurants to GeoJSON format (most efficient for Mapbox)
+        const geojson: GeoJSON.FeatureCollection<GeoJSON.Point> = {
+          type: "FeatureCollection",
+          features: restaurants
+            .filter((restaurant) => restaurant.fields.location)
+            .map((restaurant) => ({
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [
+                  restaurant.fields.location!.lon,
+                  restaurant.fields.location!.lat,
+                ],
+              },
+              properties: {
+                id: restaurant.sys.id,
+                slug: restaurant.fields.slug,
+                name: restaurant.fields.name,
+                favorite: restaurant.fields.favorite || false,
+                instagram: restaurant.fields.instagram,
+                tags: restaurant.fields.tags || [],
+              },
+            })),
+        };
 
-      // Add source
-      map.addSource("restaurants", {
-        type: "geojson",
-        data: geojson,
-        cluster: false,
-      });
+        // Add source
+        map.addSource("restaurants", {
+          type: "geojson",
+          data: geojson,
+          cluster: false,
+        });
 
-      // Add layer for restaurant markers
-      map.addLayer({
-        id: "restaurants",
-        type: "circle",
-        source: "restaurants",
-        paint: {
-          "circle-radius": 8,
-          "circle-color": [
-            "case",
-            ["get", "favorite"],
-            "#ef4444", // red for favorites
-            "#3b82f6", // blue for regular
-          ],
-          "circle-stroke-width": 2,
-          "circle-stroke-color": "#ffffff",
-        },
+        // Add layer for restaurant markers using custom PNG icons
+        map.addLayer({
+          id: "restaurants",
+          type: "symbol",
+          source: "restaurants",
+          layout: {
+            "icon-image": [
+              "case",
+              ["get", "favorite"],
+              "marker-favorite",
+              "marker-regular",
+            ],
+            "icon-size": 1,
+            "icon-anchor": "bottom",
+          },
+        });
+
+        // Continue with the rest of the initialization...
+        initializeMapFeatures(map, geojson, restaurants);
       });
+    });
+
+    function initializeMapFeatures(
+      map: mapboxgl.Map,
+      geojson: GeoJSON.FeatureCollection<GeoJSON.Point>,
+      restaurants: Entry<RestaurantSkeleton, undefined, string>[]
+    ) {
 
       // Check if we're on a single restaurant page
       const restaurantSlugMatch = pathnameRef.current.match(
@@ -169,7 +204,7 @@ export default function Map({
         const tagsArray = Array.isArray(tags) ? tags : [];
         const tagsHtml =
           tagsArray.length > 0
-            ? `<p class="text-sm text-gray-600 mt-1">${tagsArray.join(", ")}</p>`
+            ? `<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${tagsArray.join(", ")}</p>`
             : "";
 
         const instagramHtml = instagram
@@ -181,7 +216,7 @@ export default function Map({
           .setHTML(
             `
             <div class="p-3">
-              <h3 class="font-semibold text-lg text-gray-900">${name}</h3>
+              <h3 class="font-semibold text-lg text-gray-900 dark:text-gray-100">${name}</h3>
               ${tagsHtml}
               ${instagramHtml}
             </div>
@@ -211,7 +246,7 @@ export default function Map({
           closePanelRef.current();
         }
       });
-    });
+    }
 
     return () => {
       map.remove();
