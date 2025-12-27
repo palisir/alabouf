@@ -41,10 +41,5 @@ bun run dev
 - `bun run lint` - Run ESLint
 
 ## Todo
-- Decide what to do with the home page
-- Add social sharing feature
-- Add i18n
-- Add half-height card for single restaurant page on mobile
-- Fix line break for Contenful long text (i.e. restaurant review)
-- User geolocation
-- Marker style on the map
+
+[Kanban on Notion](https://www.notion.so/2d68b428087b806ebbb8f3f3400166d7?v=2d68b428087b80b09dc0000c2ef1320d)
