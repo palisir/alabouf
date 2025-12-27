@@ -1,0 +1,5 @@
+---
+alwaysApply: true
+---
+
+When a fix doesn't work and you want to try a different approach, first delete/revert the previous change that failed if: (1) it won't be useful for the next attempt, or (2) the next change doesn't rely on or build upon the failed change. Don't leave broken or useless code in the codebase when trying a new fix.
