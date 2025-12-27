@@ -132,8 +132,9 @@ async function generateMarkers() {
     if (hasRegular) {
       console.log("📍 Generating regular marker...");
       const regularSvg = readFileSync(MARKER_SOURCE_REGULAR);
+      // Resize maintaining aspect ratio with transparent padding to make square
       await sharp(regularSvg)
-        .resize(MARKER_SIZE, MARKER_SIZE)
+        .resize(MARKER_SIZE, MARKER_SIZE, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
         .png()
         .toFile(join(MARKER_OUTPUT_DIR, "marker-regular.png"));
       console.log(`  ✓ marker-regular.png`);
@@ -144,8 +145,9 @@ async function generateMarkers() {
     if (hasFavorite) {
       console.log("\n❤️  Generating favorite marker...");
       const favoriteSvg = readFileSync(MARKER_SOURCE_FAVORITE);
+      // Resize maintaining aspect ratio with transparent padding to make square
       await sharp(favoriteSvg)
-        .resize(MARKER_SIZE, MARKER_SIZE)
+        .resize(MARKER_SIZE, MARKER_SIZE, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
         .png()
         .toFile(join(MARKER_OUTPUT_DIR, "marker-favorite.png"));
       console.log(`  ✓ marker-favorite.png`);
