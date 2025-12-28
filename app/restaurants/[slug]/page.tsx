@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import type { Document } from "@contentful/rich-text-types";
 import { getRestaurantBySlug } from "@/lib/contentful/restaurants";
+import { richTextOptions } from "@/lib/contentful/richTextOptions";
 import ShareButton from "@/app/components/ShareButton";
 
 interface RestaurantPageProps {
@@ -71,7 +72,7 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
 
         {review && (
           <div className="mt-6 prose prose-sm md:prose-base max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-(--color-primary) prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900">
-            {documentToReactComponents(review as Document)}
+            {documentToReactComponents(review as Document, richTextOptions)}
           </div>
         )}
       </article>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import type { Document } from "@contentful/rich-text-types";
 import { getStaticPageBySlug } from "@/lib/contentful/static-pages";
+import { richTextOptions } from "@/lib/contentful/richTextOptions";
 
 interface StaticPageProps {
   params: Promise<{
@@ -34,7 +35,7 @@ export default async function StaticPage({ params }: StaticPageProps) {
       <h2 className="text-2xl font-semibold text-gray-900 mb-4">{title}</h2>
       {body && (
         <div className="text-sm text-gray-700 mt-4 prose prose-sm max-w-none">
-          {documentToReactComponents(body as Document)}
+          {documentToReactComponents(body as Document, richTextOptions)}
         </div>
       )}
     </article>
