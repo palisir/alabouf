@@ -99,7 +99,7 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
         `}
       >
         {/* Panel content */}
-        <div ref={scrollContainerRef} className="flex-1 p-6 md:p-8 overflow-y-auto min-h-0">
+        <div ref={scrollContainerRef} className="flex-1 p-6 md:p-8 md:pt-20 overflow-y-auto min-h-0">
           {children}
         </div>
 
