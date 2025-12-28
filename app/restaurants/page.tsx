@@ -1,6 +1,7 @@
 import Link from "next/link";
 import RestaurantList from "../components/RestaurantList";
 import { getRestaurants } from "@/lib/contentful/restaurants";
+import { getPreferredLocale } from "@/lib/contentful/locale";
 
 interface RestaurantsPageProps {
   searchParams: Promise<{
@@ -13,7 +14,8 @@ export default async function RestaurantsPage({
   searchParams,
 }: RestaurantsPageProps) {
   const { tag, search } = await searchParams;
-  const { items: restaurants } = await getRestaurants(search, tag);
+  const locale = await getPreferredLocale();
+  const { items: restaurants } = await getRestaurants(locale, search, tag);
 
   return (
     <>

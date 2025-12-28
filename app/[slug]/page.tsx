@@ -3,6 +3,7 @@ import Link from "next/link";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import type { Document } from "@contentful/rich-text-types";
 import { getStaticPageBySlug } from "@/lib/contentful/static-pages";
+import { getPreferredLocale } from "@/lib/contentful/locale";
 import { richTextOptions } from "@/lib/contentful/richTextOptions";
 
 interface StaticPageProps {
@@ -19,7 +20,8 @@ export default async function StaticPage({ params }: StaticPageProps) {
     notFound();
   }
 
-  const page = await getStaticPageBySlug(slug);
+  const locale = await getPreferredLocale();
+  const page = await getStaticPageBySlug(slug, locale);
 
   if (!page) {
     notFound();

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import type { Document } from "@contentful/rich-text-types";
 import { getRestaurantBySlug } from "@/lib/contentful/restaurants";
+import { getPreferredLocale } from "@/lib/contentful/locale";
 import { richTextOptions } from "@/lib/contentful/richTextOptions";
 import ShareButton from "@/app/components/ShareButton";
 
@@ -13,7 +14,8 @@ interface RestaurantPageProps {
 
 export default async function RestaurantPage({ params }: RestaurantPageProps) {
   const { slug } = await params;
-  const restaurant = await getRestaurantBySlug(slug);
+  const locale = await getPreferredLocale();
+  const restaurant = await getRestaurantBySlug(slug, locale);
 
   if (!restaurant) {
     notFound();

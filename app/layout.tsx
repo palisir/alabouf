@@ -6,6 +6,7 @@ import { PanelProvider } from "./components/PanelContext";
 import Map from "./components/Map";
 import PanelWithContent from "./components/PanelWithContent";
 import { getRestaurants } from "@/lib/contentful/restaurants";
+import { getPreferredLocale } from "@/lib/contentful/locale";
 
 const roboto = Roboto({
   weight: ["400", "500", "700"],
@@ -46,7 +47,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { items: restaurants } = await getRestaurants();
+  const locale = await getPreferredLocale();
+  const { items: restaurants } = await getRestaurants(locale);
 
   return (
     <html

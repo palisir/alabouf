@@ -62,7 +62,10 @@ The project uses two content types in Contentful:
 - `body` (RichText, required) - Page content
 
 ### Content Locale
-- The app uses `'fr'` (French) as the primary locale for content delivery
+- The app detects browser language via `Accept-Language` header
+- Supported locales: `'fr'` (French) and `'en-US'` (English)
+- French is the fallback for missing translations
+- Content is fetched with `locale: '*'` to get all locales in a single request
 - Maintenance scripts use `'en-US'` locale
 
 ## Development Workflow
