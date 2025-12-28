@@ -165,7 +165,6 @@ export default function Map({
         /^\/restaurants\/([^/]+)$/
       );
       const restaurantSlug = restaurantSlugMatch?.[1];
-      const onRestaurantDetail = isRestaurantDetailPage(pathnameRef.current);
 
       if (restaurantSlug) {
         // Find the restaurant by slug and center on it
