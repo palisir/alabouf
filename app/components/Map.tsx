@@ -50,31 +50,27 @@ export default function Map({
     mapRef.current = map;
 
     map.on("load", () => {
-      // Load custom marker images (PNG for better performance)
-      Promise.all([
-        new Promise<void>((resolve) => {
-          map.loadImage("/markers/marker-regular.png", (error, image) => {
-            if (error) {
-              console.warn("Regular marker not found, using fallback:", error);
-              resolve(); // Continue even if marker is missing
-            } else if (image) {
-              map.addImage("marker-regular", image);
-              resolve();
-            }
-          });
-        }),
-        new Promise<void>((resolve) => {
-          map.loadImage("/markers/marker-favorite.png", (error, image) => {
-            if (error) {
-              console.warn("Favorite marker not found, using fallback:", error);
-              resolve(); // Continue even if marker is missing
-            } else if (image) {
-              map.addImage("marker-favorite", image);
-              resolve();
-            }
-          });
-        }),
-      ]).then(() => {
+      // Load custom marker images (3x PNGs for Retina)
+      const markers = [
+        { name: "marker-regular", path: "/markers/marker-regular.png" },
+        { name: "marker-favorite", path: "/markers/marker-favorite.png" },
+      ];
+
+      Promise.all(
+        markers.map(
+          ({ name, path }) =>
+            new Promise<void>((resolve) => {
+              map.loadImage(path, (error, image) => {
+                if (error) {
+                  console.warn(`${name} not found:`, error);
+                } else if (image) {
+                  map.addImage(name, image, { pixelRatio: 3 });
+                }
+                resolve();
+              });
+            })
+        )
+      ).then(() => {
         // Convert restaurants to GeoJSON format (most efficient for Mapbox)
         const geojson: GeoJSON.FeatureCollection<GeoJSON.Point> = {
           type: "FeatureCollection",

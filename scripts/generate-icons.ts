@@ -5,9 +5,13 @@ import { join } from "path";
 const SOURCE_SVG = "public/icons/icon-source.svg";
 const OUTPUT_DIR = "public/icons";
 
-const MARKER_SOURCE_REGULAR = "public/markers/marker-regular-source.svg";
-const MARKER_SOURCE_FAVORITE = "public/markers/marker-favorite-source.svg";
+const MARKER_SOURCES = [
+  { name: "marker-regular", path: "public/markers/marker-regular-source.svg" },
+  { name: "marker-favorite", path: "public/markers/marker-favorite-source.svg" },
+];
 const MARKER_OUTPUT_DIR = "public/markers";
+const MARKER_SIZE = 56;
+const MARKER_DENSITY = 3; // For Retina displays
 
 // Icon sizes to generate
 const ICON_SIZES = {
@@ -15,9 +19,6 @@ const ICON_SIZES = {
   apple: [180],
   pwa: [192, 512],
 };
-
-// Marker size (PNG will be generated at this size)
-const MARKER_SIZE = 48;
 
 async function generateIcons() {
   console.log("🎨 Starting icon generation...\n");
@@ -108,59 +109,27 @@ async function generateIcons() {
 async function generateMarkers() {
   console.log("📍 Starting marker generation...\n");
 
-  // Ensure output directory exists
   if (!existsSync(MARKER_OUTPUT_DIR)) {
     mkdirSync(MARKER_OUTPUT_DIR, { recursive: true });
-    console.log(`✅ Created output directory: ${MARKER_OUTPUT_DIR}\n`);
   }
 
-  // Check if source SVGs exist
-  const hasRegular = existsSync(MARKER_SOURCE_REGULAR);
-  const hasFavorite = existsSync(MARKER_SOURCE_FAVORITE);
-
-  if (!hasRegular && !hasFavorite) {
-    console.log(
-      `ℹ️  No marker sources found. Skipping marker generation.\n` +
-        `   Place your marker SVGs at:\n` +
-        `   - ${MARKER_SOURCE_REGULAR}\n` +
-        `   - ${MARKER_SOURCE_FAVORITE}\n`
-    );
-    return;
-  }
-
-  try {
-    if (hasRegular) {
-      console.log("📍 Generating regular marker...");
-      const regularSvg = readFileSync(MARKER_SOURCE_REGULAR);
-      // Resize maintaining aspect ratio with transparent padding to make square
-      await sharp(regularSvg)
-        .resize(MARKER_SIZE, MARKER_SIZE, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
-        .png()
-        .toFile(join(MARKER_OUTPUT_DIR, "marker-regular.png"));
-      console.log(`  ✓ marker-regular.png`);
-    } else {
-      console.log(`⚠️  Regular marker source not found: ${MARKER_SOURCE_REGULAR}`);
+  for (const { name, path } of MARKER_SOURCES) {
+    if (!existsSync(path)) {
+      console.log(`⚠️  ${name} source not found: ${path}`);
+      continue;
     }
-
-    if (hasFavorite) {
-      console.log("\n❤️  Generating favorite marker...");
-      const favoriteSvg = readFileSync(MARKER_SOURCE_FAVORITE);
-      // Resize maintaining aspect ratio with transparent padding to make square
-      await sharp(favoriteSvg)
-        .resize(MARKER_SIZE, MARKER_SIZE, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
-        .png()
-        .toFile(join(MARKER_OUTPUT_DIR, "marker-favorite.png"));
-      console.log(`  ✓ marker-favorite.png`);
-    } else {
-      console.log(`⚠️  Favorite marker source not found: ${MARKER_SOURCE_FAVORITE}`);
-    }
-
-    console.log("\n✨ Markers generated successfully!");
-    console.log(`\nOutput directory: ${MARKER_OUTPUT_DIR}`);
-  } catch (error) {
-    console.error("\n❌ Error generating markers:", error);
-    process.exit(1);
+    const svg = readFileSync(path);
+    await sharp(svg)
+      .resize(MARKER_SIZE * MARKER_DENSITY, MARKER_SIZE * MARKER_DENSITY, {
+        fit: "contain",
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      })
+      .png()
+      .toFile(join(MARKER_OUTPUT_DIR, `${name}.png`));
+    console.log(`  ✓ ${name}.png`);
   }
+
+  console.log("\n✨ Markers generated successfully!");
 }
 
 async function main() {
