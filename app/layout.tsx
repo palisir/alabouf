@@ -58,7 +58,7 @@ export default async function RootLayout({
       <body className={`${roboto.variable} m-0 p-0 antialiased font-sans`}>
         {process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
           <Script
-            src="https://umami.is/script.js"
+            src="https://cloud.umami.is/script.js"
             data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
             strategy="afterInteractive"
           />
