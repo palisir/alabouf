@@ -10,8 +10,8 @@ const MARKER_SOURCES = [
   { name: "marker-favorite", path: "public/markers/marker-favorite-source.svg" },
 ];
 const MARKER_OUTPUT_DIR = "public/markers";
-const MARKER_SIZE = 56;
-const MARKER_DENSITY = 3; // For Retina displays
+const MARKER_SIZE = 48;
+const MARKER_DENSITY = 4; // For Retina displays + 1.2x scaling
 
 // Icon sizes to generate
 const ICON_SIZES = {

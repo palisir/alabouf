@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import type { Document } from "@contentful/rich-text-types";
@@ -24,16 +23,8 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
 
   return (
     <>
-      <div className="mb-6">
-        <Link
-          href="/restaurants"
-          className="text-sm text-(--color-primary) hover:text-(--color-primary-dark) hover:underline transition-colors duration-200 inline-flex items-center gap-1"
-        >
-          ← Retour à la liste des restaurants
-        </Link>
-      </div>
       <article>
-        <div className="flex items-start justify-between gap-3 mb-6">
+        <div className="flex items-start justify-between gap-3 mb-4">
           <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 leading-tight">
             {name}
             &nbsp;

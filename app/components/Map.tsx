@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import mapboxgl from "mapbox-gl";
 import type { Entry } from "contentful";
@@ -20,19 +20,35 @@ export default function Map({
 }: MapProps) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const { closePanel } = usePanel();
+  const { isOpen, closePanel } = usePanel();
+  const isOpenRef = useRef(isOpen);
   const closePanelRef = useRef(closePanel);
   const pathname = usePathname();
   const pathnameRef = useRef(pathname);
   const router = useRouter();
   const routerRef = useRef(router);
 
+  // Helper to check if on restaurant detail page
+  const isRestaurantDetailPage = useCallback((path: string) => {
+    return /^\/restaurants\/[^/]+$/.test(path);
+  }, []);
+
+  // Helper to calculate map padding based on panel state
+  const getMapPadding = useCallback((panelOpen: boolean, onRestaurantDetail: boolean) => {
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    if (isMobile && panelOpen && onRestaurantDetail) {
+      return { bottom: window.innerHeight / 2 };
+    }
+    return {};
+  }, []);
+
   // Update refs when values change, but don't trigger map reload
   useEffect(() => {
+    isOpenRef.current = isOpen;
     closePanelRef.current = closePanel;
     pathnameRef.current = pathname;
     routerRef.current = router;
-  }, [closePanel, pathname, router]);
+  }, [isOpen, closePanel, pathname, router]);
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -118,6 +134,9 @@ export default function Map({
             "icon-size": 1,
             "icon-anchor": "bottom",
           },
+          paint: {
+            "icon-opacity": 1,
+          },
         });
 
         // Continue with the rest of the initialization...
@@ -136,6 +155,7 @@ export default function Map({
         /^\/restaurants\/([^/]+)$/
       );
       const restaurantSlug = restaurantSlugMatch?.[1];
+      const onRestaurantDetail = isRestaurantDetailPage(pathnameRef.current);
 
       if (restaurantSlug) {
         // Find the restaurant by slug and center on it
@@ -148,10 +168,12 @@ export default function Map({
             restaurant.fields.location!.lon,
             restaurant.fields.location!.lat,
           ];
+          const padding = getMapPadding(isOpenRef.current, onRestaurantDetail);
           map.flyTo({
             center: coordinates,
             zoom: 16,
             duration: 0,
+            padding,
           });
         }
       } else if (geojson.features.length > 0) {
@@ -166,7 +188,7 @@ export default function Map({
         map.fitBounds(bounds, { padding });
       }
 
-      // Add popup on click and center map on marker
+      // Scale up marker on click and center map
       map.on("click", "restaurants", (e) => {
         if (!e.features?.[0]) return;
 
@@ -174,51 +196,24 @@ export default function Map({
         const coordinates = (
           feature.geometry as GeoJSON.Point
         ).coordinates.slice() as [number, number];
-        const { name, slug, instagram, tags } = feature.properties as {
-          name: string;
+        const { slug } = feature.properties as {
           slug: string;
-          instagram?: string;
-          tags: string[];
         };
 
         // Navigate to the restaurant detail page
         routerRef.current.push(`/restaurants/${slug}`);
 
-        // Ensure popup appears over the correct location
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }
-
-        // Center map on the marker with smooth animation
+        // Center map on the marker with smooth animation (panel will be open after navigation)
+        const padding = getMapPadding(true, true);
         map.flyTo({
           center: coordinates,
           zoom: Math.max(map.getZoom(), 16),
           essential: true,
           duration: 1000,
+          padding,
         });
 
-        const tagsArray = Array.isArray(tags) ? tags : [];
-        const tagsHtml =
-          tagsArray.length > 0
-            ? `<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${tagsArray.join(", ")}</p>`
-            : "";
-
-        const instagramHtml = instagram
-          ? `<a href="https://instagram.com/${instagram}" target="_blank" rel="noopener noreferrer" class="text-sm hover:underline mt-2 inline-block transition-colors" style="color: #D97757;">@${instagram}</a>`
-          : "";
-
-        new mapboxgl.Popup()
-          .setLngLat(coordinates)
-          .setHTML(
-            `
-            <div class="p-3">
-              <h3 class="font-semibold text-lg text-gray-900 dark:text-gray-100">${name}</h3>
-              ${tagsHtml}
-              ${instagramHtml}
-            </div>
-          `
-          )
-          .addTo(map);
+        // Marker size is handled by the useEffect that watches pathname/isOpen
       });
 
       // Change cursor on hover
@@ -230,16 +225,25 @@ export default function Map({
         map.getCanvas().style.cursor = "";
       });
 
-      // Close panel when clicking on the map background (not on restaurants)
+      // Handle clicks on the map background (not on restaurants)
       map.on("click", (e: mapboxgl.MapMouseEvent) => {
         // Check if click is on a restaurant marker
         const features = map.queryRenderedFeatures(e.point, {
           layers: ["restaurants"],
         });
 
-        // Only close panel if not clicking on a restaurant
+        // Only handle if not clicking on a restaurant
         if (features.length === 0) {
-          closePanelRef.current();
+          const onRestaurantDetail = isRestaurantDetailPage(pathnameRef.current);
+          const isMobile = window.innerWidth < 768;
+          
+          if (onRestaurantDetail && isMobile) {
+            // On mobile restaurant detail: navigate to home (closes panel + resets URL)
+            routerRef.current.push("/");
+          } else {
+            // Otherwise: just close the panel
+            closePanelRef.current();
+          }
         }
       });
     }
@@ -247,7 +251,7 @@ export default function Map({
     return () => {
       map.remove();
     };
-  }, [restaurants, zoom, style]);
+  }, [restaurants, zoom, style, getMapPadding, isRestaurantDetailPage]);
 
   // Update map center when pathname changes (navigating between restaurants)
   // This handles pathname changes after the map is already loaded
@@ -256,6 +260,7 @@ export default function Map({
 
     const restaurantSlugMatch = pathname.match(/^\/restaurants\/([^/]+)$/);
     const restaurantSlug = restaurantSlugMatch?.[1];
+    const onRestaurantDetail = isRestaurantDetailPage(pathname);
 
     if (restaurantSlug && mapRef.current.isStyleLoaded()) {
       const restaurant = restaurants.find(
@@ -267,14 +272,62 @@ export default function Map({
           restaurant.fields.location!.lon,
           restaurant.fields.location!.lat,
         ];
+        const padding = getMapPadding(isOpen, onRestaurantDetail);
         mapRef.current.flyTo({
           center: coordinates,
           zoom: 18,
           duration: 1000,
+          padding,
         });
       }
     }
-  }, [pathname, restaurants]);
+  }, [pathname, restaurants, isOpen, isRestaurantDetailPage, getMapPadding]);
+
+  // Recenter map when panel opens/closes on restaurant detail page
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
+
+    const onRestaurantDetail = isRestaurantDetailPage(pathname);
+    if (!onRestaurantDetail) return;
+
+    const restaurantSlugMatch = pathname.match(/^\/restaurants\/([^/]+)$/);
+    const restaurantSlug = restaurantSlugMatch?.[1];
+    if (!restaurantSlug) return;
+
+    const restaurant = restaurants.find(
+      (r) => r.fields.slug === restaurantSlug && r.fields.location
+    );
+
+    if (restaurant) {
+      const coordinates: [number, number] = [
+        restaurant.fields.location!.lon,
+        restaurant.fields.location!.lat,
+      ];
+      const padding = getMapPadding(isOpen, onRestaurantDetail);
+      mapRef.current.flyTo({
+        center: coordinates,
+        zoom: mapRef.current.getZoom(),
+        duration: 300,
+        padding,
+      });
+    }
+  }, [isOpen, pathname, restaurants, isRestaurantDetailPage, getMapPadding]);
+
+  // Update marker size based on which restaurant is currently open
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
+
+    const onRestaurantDetail = isRestaurantDetailPage(pathname);
+    const restaurantSlugMatch = pathname.match(/^\/restaurants\/([^/]+)$/);
+    const activeSlug = onRestaurantDetail && isOpen ? restaurantSlugMatch?.[1] : null;
+
+    // Scale up the active restaurant marker, reset others
+    mapRef.current.setLayoutProperty("restaurants", "icon-size", 
+      activeSlug
+        ? ["case", ["==", ["get", "slug"], activeSlug], 1.2, 1]
+        : 1
+    );
+  }, [pathname, isOpen, isRestaurantDetailPage]);
 
   return (
     <div

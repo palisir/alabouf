@@ -31,13 +31,13 @@ export default function RestaurantListItem({
     <article className="border-b border-gray-200 pb-6 last:border-b-0 overflow-hidden">
       <div className="flex items-start justify-between gap-3 mb-3 min-w-0">
         <Link href={`/restaurants/${slug}`} className="min-w-0 flex-1">
-          <h3 className="text-xl font-semibold text-gray-900 hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer break-words">
+          <h3 className="text-xl font-semibold text-gray-900 hover:text-(--color-primary) transition-colors duration-200 cursor-pointer wrap-break-word">
             {name}
           </h3>
         </Link>
         {favorite && (
           <span
-            className="flex-shrink-0 text-[var(--color-primary)] text-lg font-medium"
+            className="shrink-0 text-(--color-primary) text-lg font-medium"
             title="Favori"
             aria-label="Restaurant favori"
           >
@@ -54,7 +54,7 @@ export default function RestaurantListItem({
               onClick={() => onTagClick(tag)}
               className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors duration-200 ${
                 filterTag === tag
-                  ? "bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-dark)]"
+                  ? "bg-(--color-primary) text-white hover:bg-(--color-primary-dark)"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
@@ -70,7 +70,7 @@ export default function RestaurantListItem({
             href={instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] hover:underline transition-colors duration-200 break-all"
+            className="text-sm text-(--color-primary) hover:text-(--color-primary-dark) hover:underline transition-colors duration-200 break-all"
           >
             {instagram}
           </a>
@@ -78,7 +78,7 @@ export default function RestaurantListItem({
       )}
 
       {reviewExcerpt && (
-        <div className="text-sm mt-4 text-gray-600 leading-relaxed break-words overflow-hidden">
+        <div className="text-sm mt-4 text-gray-600 leading-relaxed wrap-break-word overflow-hidden">
           {reviewExcerpt}
         </div>
       )}
