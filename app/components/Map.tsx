@@ -6,6 +6,7 @@ import mapboxgl from "mapbox-gl";
 import type { Entry } from "contentful";
 import type { RestaurantSkeleton } from "@/lib/contentful/types";
 import { usePanel } from "./PanelContext";
+import { useMapPadding } from "./useMapPadding";
 
 // Montreal default center coordinates
 const MONTREAL_CENTER: [number, number] = [-73.5673, 45.5017];
@@ -25,6 +26,7 @@ export default function Map({
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const geolocateControlRef = useRef<mapboxgl.GeolocateControl | null>(null);
   const { isOpen, closePanel } = usePanel();
+  const { getPadding } = useMapPadding();
   const isOpenRef = useRef(isOpen);
   const closePanelRef = useRef(closePanel);
   const pathname = usePathname();
@@ -35,15 +37,6 @@ export default function Map({
   // Helper to check if on restaurant detail page
   const isRestaurantDetailPage = useCallback((path: string) => {
     return /^\/restaurants\/[^/]+$/.test(path);
-  }, []);
-
-  // Helper to calculate map padding based on panel state
-  const getMapPadding = useCallback((panelOpen: boolean, onRestaurantDetail: boolean) => {
-    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-    if (isMobile && panelOpen && onRestaurantDetail) {
-      return { bottom: window.innerHeight / 2 };
-    }
-    return {};
   }, []);
 
   // Update refs when values change, but don't trigger map reload
@@ -185,12 +178,11 @@ export default function Map({
             restaurant.fields.location!.lon,
             restaurant.fields.location!.lat,
           ];
-          const padding = getMapPadding(isOpenRef.current, onRestaurantDetail);
+          // Padding is handled by persistent map.setPadding(), no need to pass it here
           map.flyTo({
             center: coordinates,
             zoom: 16,
             duration: 0,
-            padding,
           });
         }
       } else {
@@ -223,14 +215,13 @@ export default function Map({
         // Navigate to the restaurant detail page
         routerRef.current.push(`/restaurants/${slug}`);
 
-        // Center map on the marker with smooth animation (panel will be open after navigation)
-        const padding = getMapPadding(true, true);
+        // Center map on the marker with smooth animation
+        // Padding is handled by persistent map.setPadding(), no need to pass it here
         map.flyTo({
           center: coordinates,
           zoom: Math.max(map.getZoom(), 16),
           essential: true,
           duration: 1000,
-          padding,
         });
 
         // Marker size is handled by the useEffect that watches pathname/isOpen
@@ -271,7 +262,7 @@ export default function Map({
     return () => {
       map.remove();
     };
-  }, [restaurants, zoom, style, getMapPadding, isRestaurantDetailPage]);
+  }, [restaurants, zoom, style, isRestaurantDetailPage]);
 
   // Update map center when pathname changes (navigating between restaurants)
   // This handles pathname changes after the map is already loaded
@@ -280,7 +271,6 @@ export default function Map({
 
     const restaurantSlugMatch = pathname.match(/^\/restaurants\/([^/]+)$/);
     const restaurantSlug = restaurantSlugMatch?.[1];
-    const onRestaurantDetail = isRestaurantDetailPage(pathname);
 
     if (restaurantSlug && mapRef.current.isStyleLoaded()) {
       const restaurant = restaurants.find(
@@ -292,46 +282,45 @@ export default function Map({
           restaurant.fields.location!.lon,
           restaurant.fields.location!.lat,
         ];
-        const padding = getMapPadding(isOpen, onRestaurantDetail);
+        // Padding is handled by persistent map.setPadding(), no need to pass it here
         mapRef.current.flyTo({
           center: coordinates,
           zoom: 18,
           duration: 1000,
-          padding,
         });
       }
     }
-  }, [pathname, restaurants, isOpen, isRestaurantDetailPage, getMapPadding]);
+  }, [pathname, restaurants, isRestaurantDetailPage]);
 
-  // Recenter map when panel opens/closes on restaurant detail page
+  // Set persistent map padding based on panel state
+  // This makes Mapbox SDK natively understand the visible viewport,
+  // so all centering operations automatically work correctly
   useEffect(() => {
-    if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
+    if (!mapRef.current) return;
 
-    const onRestaurantDetail = isRestaurantDetailPage(pathname);
-    if (!onRestaurantDetail) return;
+    const padding = getPadding();
+    mapRef.current.setPadding(padding);
 
-    const restaurantSlugMatch = pathname.match(/^\/restaurants\/([^/]+)$/);
-    const restaurantSlug = restaurantSlugMatch?.[1];
-    if (!restaurantSlug) return;
-
-    const restaurant = restaurants.find(
-      (r) => r.fields.slug === restaurantSlug && r.fields.location
-    );
-
-    if (restaurant) {
-      const coordinates: [number, number] = [
-        restaurant.fields.location!.lon,
-        restaurant.fields.location!.lat,
-      ];
-      const padding = getMapPadding(isOpen, onRestaurantDetail);
-      mapRef.current.flyTo({
-        center: coordinates,
-        zoom: mapRef.current.getZoom(),
+    // Smoothly adjust the view to account for the new padding
+    // by re-centering on the current center (which is now calculated with new padding)
+    if (mapRef.current.isStyleLoaded()) {
+      mapRef.current.easeTo({
+        center: mapRef.current.getCenter(),
         duration: 300,
-        padding,
       });
     }
-  }, [isOpen, pathname, restaurants, isRestaurantDetailPage, getMapPadding]);
+  }, [isOpen, getPadding]);
+
+  // Update padding on window resize (since padding is based on viewport dimensions)
+  useEffect(() => {
+    const handleResize = () => {
+      if (!mapRef.current) return;
+      mapRef.current.setPadding(getPadding());
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [getPadding]);
 
   // Update marker size based on which restaurant is currently open
   useEffect(() => {
