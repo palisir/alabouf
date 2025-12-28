@@ -7,6 +7,9 @@ import type { Entry } from "contentful";
 import type { RestaurantSkeleton } from "@/lib/contentful/types";
 import { usePanel } from "./PanelContext";
 
+// Montreal default center coordinates
+const MONTREAL_CENTER: [number, number] = [-73.5673, 45.5017];
+
 interface MapProps {
   restaurants: Entry<RestaurantSkeleton, undefined, string>[];
   zoom?: number;
@@ -20,6 +23,7 @@ export default function Map({
 }: MapProps) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
+  const geolocateControlRef = useRef<mapboxgl.GeolocateControl | null>(null);
   const { isOpen, closePanel } = usePanel();
   const isOpenRef = useRef(isOpen);
   const closePanelRef = useRef(closePanel);
@@ -59,9 +63,22 @@ export default function Map({
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style,
+      center: MONTREAL_CENTER,
       zoom,
       collectResourceTiming: false, // Disable telemetry data collection
     });
+
+    // Add geolocate control (blue dot for user location)
+    const geolocateControl = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+        timeout: 5000,
+      },
+      trackUserLocation: false,
+      showUserHeading: false,
+    });
+    geolocateControlRef.current = geolocateControl;
+    map.addControl(geolocateControl);
 
     mapRef.current = map;
 
@@ -176,16 +193,19 @@ export default function Map({
             padding,
           });
         }
-      } else if (geojson.features.length > 0) {
-        // Fit map to show all restaurants
-        const bounds = new mapboxgl.LngLatBounds();
-        geojson.features.forEach((feature) => {
-          bounds.extend(feature.geometry.coordinates as [number, number]);
-        });
-        const container = map.getContainer();
-        const padding =
-          Math.min(container.offsetWidth, container.offsetHeight) * 0.05;
-        map.fitBounds(bounds, { padding });
+      } else {
+        // Not on restaurant detail page: try to geolocate user
+        if (geolocateControlRef.current) {
+          // If geolocation fails, fly to Montreal as fallback
+          geolocateControlRef.current.once("error", () => {
+            map.flyTo({
+              center: MONTREAL_CENTER,
+              zoom,
+              duration: 1000,
+            });
+          });
+          geolocateControlRef.current.trigger();
+        }
       }
 
       // Scale up marker on click and center map

@@ -23,14 +23,12 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
 
   // Track panel top position separately to avoid flicker when closing
   // Only update when panel is transitioning from closed to open
-  // Using React's "adjusting state during render" pattern
   const [panelTop, setPanelTop] = useState("5rem");
-  const [prevIsOpen, setPrevIsOpen] = useState(false);
-  
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+
   if (isOpen !== prevIsOpen) {
     setPrevIsOpen(isOpen);
-    if (isOpen && !prevIsOpen) {
-      // Panel is opening - capture the correct panelTop
+    if (isOpen) {
       setPanelTop(isRestaurantDetail ? "40vh" : "5rem");
     }
   }
