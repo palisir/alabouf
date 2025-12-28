@@ -10,7 +10,9 @@
     "prepare": "husky",
     "generate-icons": "bun run scripts/generate-icons.ts",
     "downcase-tags": "bun run scripts/downcase-restaurant-tags.ts",
-    "downcase-tags:dry": "DRY_RUN=true bun run scripts/downcase-restaurant-tags.ts"
+    "downcase-tags:dry": "DRY_RUN=true bun run scripts/downcase-restaurant-tags.ts",
+    "fix-review-locale": "bun run scripts/fix-review-locale.ts",
+    "fix-review-locale:dry": "DRY_RUN=true bun run scripts/fix-review-locale.ts"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
