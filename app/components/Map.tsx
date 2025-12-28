@@ -78,7 +78,7 @@ export default function Map({
       showUserHeading: false,
     });
     geolocateControlRef.current = geolocateControl;
-    map.addControl(geolocateControl);
+    map.addControl(geolocateControl, 'bottom-right');
 
     mapRef.current = map;
 
