@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import type { Document } from "@contentful/rich-text-types";
 import { getRestaurantBySlug } from "@/lib/contentful/restaurants";
+import ShareButton from "@/app/components/ShareButton";
 
 interface RestaurantPageProps {
   params: Promise<{
@@ -25,7 +26,7 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
       <div className="mb-6">
         <Link
           href="/restaurants"
-          className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] hover:underline transition-colors duration-200 inline-flex items-center gap-1"
+          className="text-sm text-(--color-primary) hover:text-(--color-primary-dark) hover:underline transition-colors duration-200 inline-flex items-center gap-1"
         >
           ← Retour à la liste des restaurants
         </Link>
@@ -34,16 +35,12 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
         <div className="flex items-start justify-between gap-3 mb-6">
           <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 leading-tight">
             {name}
+            &nbsp;
+            {favorite && <span className="text-(--color-primary) text-xl font-medium">♥</span>}
           </h2>
-          {favorite && (
-            <span
-              className="flex-shrink-0 text-[var(--color-primary)] text-xl font-medium"
-              title="Favori"
-              aria-label="Restaurant favori"
-            >
-              ♥
-            </span>
-          )}
+          <div className="flex items-center gap-3 shrink-0">
+            <ShareButton title={name} url={`/restaurants/${slug}`} />
+          </div>
         </div>
 
         {tags && tags.length > 0 && (
@@ -65,7 +62,7 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
               href={instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] hover:underline transition-colors duration-200"
+              className="text-sm text-(--color-primary) hover:text-(--color-primary-dark) hover:underline transition-colors duration-200"
             >
               {instagram}
             </a>
@@ -73,7 +70,7 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
         )}
 
         {review && (
-          <div className="mt-6 prose prose-sm md:prose-base max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-[var(--color-primary)] prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900">
+          <div className="mt-6 prose prose-sm md:prose-base max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-(--color-primary) prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900">
             {documentToReactComponents(review as Document)}
           </div>
         )}

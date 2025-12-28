@@ -52,7 +52,7 @@ export default function Map({
     map.on("load", () => {
       // Load custom marker images (PNG for better performance)
       Promise.all([
-        new Promise<void>((resolve, reject) => {
+        new Promise<void>((resolve) => {
           map.loadImage("/markers/marker-regular.png", (error, image) => {
             if (error) {
               console.warn("Regular marker not found, using fallback:", error);
@@ -63,7 +63,7 @@ export default function Map({
             }
           });
         }),
-        new Promise<void>((resolve, reject) => {
+        new Promise<void>((resolve) => {
           map.loadImage("/markers/marker-favorite.png", (error, image) => {
             if (error) {
               console.warn("Favorite marker not found, using fallback:", error);
