@@ -1,11 +1,11 @@
 import { headers } from 'next/headers';
 
-export const SUPPORTED_LOCALES = ['fr', 'en-US'] as const;
+export const SUPPORTED_LOCALES = ['fr', 'en-US', 'es', 'pt', 'zh', 'de', 'ja'] as const;
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number];
 export const DEFAULT_LOCALE: SupportedLocale = 'en-US';
 
 // Lingui uses simpler locale codes
-export const LINGUI_LOCALES = ['fr', 'en'] as const;
+export const LINGUI_LOCALES = ['fr', 'en', 'es', 'pt', 'zh', 'de', 'ja'] as const;
 export type LinguiLocale = typeof LINGUI_LOCALES[number];
 
 /**
@@ -34,6 +34,11 @@ export async function getPreferredLocale(): Promise<SupportedLocale> {
   for (const lang of languages) {
     if (lang === 'en') return 'en-US';
     if (lang === 'fr') return 'fr';
+    if (lang === 'es') return 'es';
+    if (lang === 'pt') return 'pt';
+    if (lang === 'zh') return 'zh';
+    if (lang === 'de') return 'de';
+    if (lang === 'ja') return 'ja';
   }
 
   return DEFAULT_LOCALE;
