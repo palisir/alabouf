@@ -4,6 +4,18 @@ export const SUPPORTED_LOCALES = ['fr', 'en-US'] as const;
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number];
 export const DEFAULT_LOCALE: SupportedLocale = 'fr';
 
+// Lingui uses simpler locale codes
+export const LINGUI_LOCALES = ['fr', 'en'] as const;
+export type LinguiLocale = typeof LINGUI_LOCALES[number];
+
+/**
+ * Maps Contentful locale to Lingui locale.
+ * Contentful uses 'en-US', Lingui uses 'en'.
+ */
+export function toLinguiLocale(contentfulLocale: SupportedLocale): LinguiLocale {
+  return contentfulLocale === 'en-US' ? 'en' : contentfulLocale;
+}
+
 /**
  * Detects the user's preferred locale from Accept-Language header.
  * Falls back to French if no supported language is found.

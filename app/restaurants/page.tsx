@@ -1,7 +1,7 @@
-import Link from "next/link";
 import RestaurantList from "../components/RestaurantList";
 import { getRestaurants } from "@/lib/contentful/restaurants";
 import { getPreferredLocale } from "@/lib/contentful/locale";
+import BackToHomeLink from "@/app/components/BackToHomeLink";
 
 interface RestaurantsPageProps {
   searchParams: Promise<{
@@ -20,12 +20,7 @@ export default async function RestaurantsPage({
   return (
     <>
       <div className="mb-6">
-        <Link
-          href="/"
-          className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] hover:underline transition-colors duration-200 inline-flex items-center gap-1"
-        >
-          ← Retour à l&apos;accueil
-        </Link>
+        <BackToHomeLink className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] hover:underline transition-colors duration-200 inline-flex items-center gap-1" />
       </div>
       <RestaurantList restaurants={restaurants} filterTag={tag} searchQuery={search} />
     </>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import PanelToggleButton from "./PanelToggleButton";
 import { usePanel } from "./PanelContext";
 import { ReactNode } from "react";
+import { Trans } from "@lingui/react/macro";
 
 interface PanelWithContentProps {
   children: ReactNode;
@@ -109,14 +110,14 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
             href="/contact" 
             className="hover:text-[var(--color-primary)] transition-colors duration-200"
           >
-            contact
+            <Trans id="navigation.contact">contact</Trans>
           </Link>
           <span className="text-gray-400">•</span>
           <Link 
             href="/mentions-legales" 
             className="hover:text-[var(--color-primary)] transition-colors duration-200"
           >
-            mentions légales
+            <Trans id="navigation.legal">legal notice</Trans>
           </Link>
         </div>
       </div>

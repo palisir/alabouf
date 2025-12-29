@@ -1,0 +1,121 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2025-12-28 19:49-0500\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#. js-lingui-explicit-id
+#: app/components/BackToHomeLink.tsx:16
+msgid "navigation.backToHome"
+msgstr "← Back to home"
+
+#. js-lingui-explicit-id
+#: app/contact/page.tsx:67
+msgid "common.errorMessage"
+msgstr "An error occurred. Please try again."
+
+#: app/contact/page.tsx:62
+msgid "common.send"
+msgstr "Send"
+
+#: app/contact/page.tsx:62
+msgid "common.sending"
+msgstr "Sending..."
+
+#. js-lingui-explicit-id
+#: app/components/PanelWithContent.tsx:113
+msgid "navigation.contact"
+msgstr "contact"
+
+#. js-lingui-explicit-id
+#: app/contact/page.tsx:16
+#: app/contact/page.tsx:30
+msgid "contact.title"
+msgstr "Contact"
+
+#. js-lingui-explicit-id
+#: app/contact/page.tsx:35
+msgid "common.email"
+msgstr "Email"
+
+#. js-lingui-explicit-id
+#: app/components/RestaurantList.tsx:69
+msgid "restaurant.filterLabel"
+msgstr "Filter:"
+
+#. js-lingui-explicit-id
+#: app/components/PanelWithContent.tsx:120
+msgid "navigation.legal"
+msgstr "legal notice"
+
+#. js-lingui-explicit-id
+#: app/contact/page.tsx:47
+msgid "common.message"
+msgstr "Message"
+
+#: app/components/RestaurantListItem.tsx:44
+msgid "restaurant.favorite"
+msgstr "Favorite"
+
+#: app/components/RestaurantListItem.tsx:45
+msgid "restaurant.favoriteAria"
+msgstr "Favorite restaurant"
+
+#: app/components/RestaurantList.tsx:86
+msgid "restaurant.noResults"
+msgstr "No restaurants found."
+
+#: app/components/RestaurantList.tsx:85
+msgid "restaurant.noResultsFiltered"
+msgstr "No restaurants found with these filters."
+
+#: app/components/RestaurantList.tsx:46
+msgid "restaurant.searchPlaceholder"
+msgstr "Search for a restaurant..."
+
+#. js-lingui-explicit-id
+#: app/components/RestaurantList.tsx:53
+msgid "restaurant.search"
+msgstr "Search"
+
+#. js-lingui-explicit-id
+#: app/components/RestaurantList.tsx:63
+msgid "restaurant.searchLabel"
+msgstr "Search:"
+
+#. js-lingui-explicit-id
+#: app/components/ShareButton.tsx:64
+msgid "share.button"
+msgstr "Share"
+
+#: app/components/ShareButton.tsx:48
+msgid "share.ariaLabel"
+msgstr "Share this restaurant"
+
+#: app/components/ShareButton.tsx:29
+msgid "share.text title={title}"
+msgstr "Check out this restaurant: {title}"
+
+#. js-lingui-explicit-id
+#: app/contact/page.tsx:20
+msgid "contact.successMessage"
+msgstr "Thank you for your message! We will get back to you soon."
+
+#. js-lingui-explicit-id
+#: app/components/RestaurantList.tsx:74
+msgid "restaurant.viewAll"
+msgstr "View all restaurants"
+
+#. js-lingui-explicit-id
+#: app/page.tsx:9
+msgid "home.tagline"
+msgstr "We tried, we loved, we share. Our favorite restaurants on a map."

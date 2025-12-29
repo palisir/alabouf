@@ -6,6 +6,8 @@ import { useState } from "react";
 import type { Entry } from "contentful";
 import type { RestaurantSkeleton } from "@/lib/contentful/types";
 import RestaurantListItem from "./RestaurantListItem";
+import { Trans } from "@lingui/react/macro";
+import { t } from "@lingui/core/macro";
 
 interface RestaurantListProps {
   restaurants: Entry<RestaurantSkeleton, undefined, string>[];
@@ -41,14 +43,14 @@ export default function RestaurantList({
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Rechercher un restaurant..."
+            placeholder={t`restaurant.searchPlaceholder`}
             className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all"
           />
           <button
             type="submit"
             className="px-5 py-2.5 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary-dark)] active:bg-[var(--color-primary-dark)] transition-colors duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2"
           >
-            Rechercher
+            <Trans id="restaurant.search">Search</Trans>
           </button>
         </div>
       </form>
@@ -58,18 +60,18 @@ export default function RestaurantList({
           <p className="text-sm text-gray-700">
             {searchQuery && (
               <>
-                Recherche : <span className="font-semibold text-[var(--color-primary-dark)]">{searchQuery}</span>
+                <Trans id="restaurant.searchLabel">Search:</Trans> <span className="font-semibold text-[var(--color-primary-dark)]">{searchQuery}</span>
               </>
             )}
             {searchQuery && filterTag && " · "}
             {filterTag && (
               <>
-                Filtre : <span className="font-semibold text-[var(--color-primary-dark)]">{filterTag}</span>
+                <Trans id="restaurant.filterLabel">Filter:</Trans> <span className="font-semibold text-[var(--color-primary-dark)]">{filterTag}</span>
               </>
             )}
             {" · "}
             <Link href="/restaurants" className="underline hover:text-[var(--color-primary)] transition-colors">
-              Voir tous les restaurants
+              <Trans id="restaurant.viewAll">View all restaurants</Trans>
             </Link>
           </p>
         </div>
@@ -80,8 +82,8 @@ export default function RestaurantList({
           <div className="text-center py-12 text-gray-500">
             <p className="text-base">
               {searchQuery || filterTag
-                ? "Aucun restaurant trouvé avec ces filtres."
-                : "Aucun restaurant trouvé."}
+                ? t`restaurant.noResultsFiltered`
+                : t`restaurant.noResults`}
             </p>
           </div>
         ) : (

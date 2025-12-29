@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "bun run i18n:compile && next build",
     "start": "next start",
     "lint": "eslint",
     "prepare": "husky",
+    "i18n:extract": "lingui extract",
+    "i18n:compile": "lingui compile",
     "generate-icons": "bun run scripts/generate-icons.ts",
     "downcase-tags": "bun run scripts/downcase-restaurant-tags.ts",
     "downcase-tags:dry": "DRY_RUN=true bun run scripts/downcase-restaurant-tags.ts",
@@ -25,6 +27,9 @@
     "@contentful/rich-text-react-renderer": "^16.1.6",
     "@contentful/rich-text-types": "^17.2.5",
     "@formspree/react": "^2.5.5",
+    "@lingui/core": "^5.7.0",
+    "@lingui/macro": "^5.7.0",
+    "@lingui/react": "^5.7.0",
     "contentful": "^11.10.1",
     "mapbox-gl": "^3.17.0",
     "next": "16.1.1",
@@ -32,6 +37,9 @@
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@lingui/babel-plugin-lingui-macro": "^5.7.0",
+    "@lingui/cli": "^5.7.0",
+    "@lingui/swc-plugin": "^5.10.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^20.19.27",
     "@types/react": "^19.2.7",

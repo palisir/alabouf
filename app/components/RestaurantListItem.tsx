@@ -1,8 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import type { Entry } from "contentful";
 import type { RestaurantSkeleton } from "@/lib/contentful/types";
 import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
 import type { Document } from "@contentful/rich-text-types";
+import { t } from "@lingui/core/macro";
 
 interface RestaurantListItemProps {
   restaurant: Entry<RestaurantSkeleton, undefined, string>;
@@ -38,8 +41,8 @@ export default function RestaurantListItem({
         {favorite && (
           <span
             className="shrink-0 text-(--color-primary) text-lg font-medium"
-            title="Favori"
-            aria-label="Restaurant favori"
+            title={t`restaurant.favorite`}
+            aria-label={t`restaurant.favoriteAria`}
           >
             ♥
           </span>

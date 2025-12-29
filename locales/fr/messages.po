@@ -1,0 +1,121 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2025-12-28 19:49-0500\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: fr\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#. js-lingui-explicit-id
+#: app/components/BackToHomeLink.tsx:16
+msgid "navigation.backToHome"
+msgstr "← Retour à l'accueil"
+
+#. js-lingui-explicit-id
+#: app/contact/page.tsx:67
+msgid "common.errorMessage"
+msgstr "Une erreur est survenue. Veuillez réessayer."
+
+#: app/contact/page.tsx:62
+msgid "common.send"
+msgstr "Envoyer"
+
+#: app/contact/page.tsx:62
+msgid "common.sending"
+msgstr "Envoi..."
+
+#. js-lingui-explicit-id
+#: app/components/PanelWithContent.tsx:113
+msgid "navigation.contact"
+msgstr "contact"
+
+#. js-lingui-explicit-id
+#: app/contact/page.tsx:16
+#: app/contact/page.tsx:30
+msgid "contact.title"
+msgstr "Contact"
+
+#. js-lingui-explicit-id
+#: app/contact/page.tsx:35
+msgid "common.email"
+msgstr "Email"
+
+#. js-lingui-explicit-id
+#: app/components/RestaurantList.tsx:69
+msgid "restaurant.filterLabel"
+msgstr "Filtre :"
+
+#. js-lingui-explicit-id
+#: app/components/PanelWithContent.tsx:120
+msgid "navigation.legal"
+msgstr "mentions légales"
+
+#. js-lingui-explicit-id
+#: app/contact/page.tsx:47
+msgid "common.message"
+msgstr "Message"
+
+#: app/components/RestaurantListItem.tsx:44
+msgid "restaurant.favorite"
+msgstr "Favori"
+
+#: app/components/RestaurantListItem.tsx:45
+msgid "restaurant.favoriteAria"
+msgstr "Restaurant favori"
+
+#: app/components/RestaurantList.tsx:86
+msgid "restaurant.noResults"
+msgstr "Aucun restaurant trouvé."
+
+#: app/components/RestaurantList.tsx:85
+msgid "restaurant.noResultsFiltered"
+msgstr "Aucun restaurant trouvé avec ces filtres."
+
+#: app/components/RestaurantList.tsx:46
+msgid "restaurant.searchPlaceholder"
+msgstr "Rechercher un restaurant..."
+
+#. js-lingui-explicit-id
+#: app/components/RestaurantList.tsx:53
+msgid "restaurant.search"
+msgstr "Rechercher"
+
+#. js-lingui-explicit-id
+#: app/components/RestaurantList.tsx:63
+msgid "restaurant.searchLabel"
+msgstr "Recherche :"
+
+#. js-lingui-explicit-id
+#: app/components/ShareButton.tsx:64
+msgid "share.button"
+msgstr "Partager"
+
+#: app/components/ShareButton.tsx:48
+msgid "share.ariaLabel"
+msgstr "Partager ce restaurant"
+
+#: app/components/ShareButton.tsx:29
+msgid "share.text title={title}"
+msgstr "Découvre ce restaurant : {title}"
+
+#. js-lingui-explicit-id
+#: app/contact/page.tsx:20
+msgid "contact.successMessage"
+msgstr "Merci pour votre message ! Nous vous répondrons bientôt."
+
+#. js-lingui-explicit-id
+#: app/components/RestaurantList.tsx:74
+msgid "restaurant.viewAll"
+msgstr "Voir tous les restaurants"
+
+#. js-lingui-explicit-id
+#: app/page.tsx:9
+msgid "home.tagline"
+msgstr "On a testé, on a aimé, on partage. Nos restos favoris sur une carte."

@@ -125,6 +125,59 @@ The project is hosted on **Vercel** ([Vercel documentation](https://vercel.com/d
 - `bun run downcase-tags` - Maintenance script to convert all restaurant tags to lowercase (fixes case-sensitivity issues)
 - `bun run downcase-tags:dry` - Run downcase-tags script in dry-run mode (preview changes without applying them)
 
+## Internationalization (i18n)
+
+### Translation Keys
+
+The project uses **Lingui** for internationalization with a structured key naming convention:
+
+**Key Format**: Hierarchical dot notation with English identifiers
+- Pattern: `{domain}.{identifier}`
+- Convention: camelCase for identifiers
+- Hierarchy: Minimal (2-3 levels)
+
+**Key Domains**:
+- `common.*` - Shared UI elements (buttons, labels, errors)
+- `navigation.*` - Navigation elements (links, menus)
+- `restaurant.*` - Restaurant-specific content
+- `share.*` - Sharing functionality
+- `contact.*` - Contact page specific
+- `home.*` - Homepage specific
+
+**Examples**:
+- `navigation.backToHome` - Back to home link
+- `restaurant.searchPlaceholder` - Search input placeholder
+- `common.email` - Email form label
+- `share.text` - Share text (may include variables like `{title}`)
+
+### Adding New Translations
+
+1. Use the translation key in your component:
+   ```tsx
+   import { Trans } from "@lingui/react/macro";
+   <Trans id="domain.newKey">Default English text</Trans>
+   ```
+
+   For template strings with variables:
+   ```tsx
+   import { t } from "@lingui/core/macro";
+   t`domain.varKey title=${value}`
+   ```
+
+2. Extract translations:
+   ```bash
+   bun run lingui extract
+   ```
+
+3. Update translations in `locales/*/messages.po` files
+
+4. Compile the messages:
+   ```bash
+   bun run lingui compile
+   ```
+
+5. The compiled messages will be automatically generated
+
 ## Project Structure
 
 ```

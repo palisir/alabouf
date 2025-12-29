@@ -1,6 +1,8 @@
 "use client";
 
 import { useForm } from "@formspree/react";
+import { Trans } from "@lingui/react/macro";
+import { t } from "@lingui/core/macro";
 
 export default function ContactPage() {
   const [state, handleSubmit] = useForm(
@@ -11,11 +13,11 @@ export default function ContactPage() {
     return (
       <div className="space-y-6">
         <h1 className="text-3xl md:text-4xl font-semibold text-gray-900">
-          Contact
+          <Trans id="contact.title">Contact</Trans>
         </h1>
         <div className="p-4 bg-[var(--color-primary-light)]/30 border border-[var(--color-primary-muted)]/40 rounded-lg">
           <p className="text-[var(--color-primary-dark)] font-medium">
-            Merci pour votre message ! Nous vous répondrons bientôt.
+            <Trans id="contact.successMessage">Thank you for your message! We will get back to you soon.</Trans>
           </p>
         </div>
       </div>
@@ -25,12 +27,12 @@ export default function ContactPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl md:text-4xl font-semibold text-gray-900">
-        Contact
+        <Trans id="contact.title">Contact</Trans>
       </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="email" className="block text-sm font-medium mb-2 text-gray-700">
-            Email
+            <Trans id="common.email">Email</Trans>
           </label>
           <input
             id="email"
@@ -42,7 +44,7 @@ export default function ContactPage() {
         </div>
         <div>
           <label htmlFor="message" className="block text-sm font-medium mb-2 text-gray-700">
-            Message
+            <Trans id="common.message">Message</Trans>
           </label>
           <textarea
             id="message"
@@ -57,12 +59,12 @@ export default function ContactPage() {
           disabled={state.submitting}
           className="px-6 py-2.5 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary-dark)] active:bg-[var(--color-primary-dark)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2"
         >
-          {state.submitting ? "Envoi..." : "Envoyer"}
+          {state.submitting ? t`common.sending` : t`common.send`}
         </button>
         {state.errors && (
           <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
             <p className="text-red-600 text-sm">
-              Une erreur est survenue. Veuillez réessayer.
+              <Trans id="common.errorMessage">An error occurred. Please try again.</Trans>
             </p>
           </div>
         )}

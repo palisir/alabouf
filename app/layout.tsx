@@ -3,10 +3,12 @@ import Script from "next/script";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import { PanelProvider } from "./components/PanelContext";
+import LinguiClientProvider from "./components/LinguiClientProvider";
 import Map from "./components/Map";
 import PanelWithContent from "./components/PanelWithContent";
 import { getRestaurants } from "@/lib/contentful/restaurants";
-import { getPreferredLocale } from "@/lib/contentful/locale";
+import { getPreferredLocale, toLinguiLocale } from "@/lib/contentful/locale";
+import { loadCatalog } from "@/lib/i18n";
 
 const roboto = Roboto({
   weight: ["400", "500", "700"],
@@ -47,12 +49,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getPreferredLocale();
-  const { items: restaurants } = await getRestaurants(locale);
+  const contentfulLocale = await getPreferredLocale();
+  const linguiLocale = toLinguiLocale(contentfulLocale);
+  const [{ items: restaurants }, messages] = await Promise.all([
+    getRestaurants(contentfulLocale),
+    loadCatalog(linguiLocale),
+  ]);
 
   return (
     <html
-      lang="en"
+      lang={linguiLocale}
       className="m-0 p-0"
     >
       <body className={`${roboto.variable} m-0 p-0 antialiased font-sans`}>
@@ -63,10 +69,12 @@ export default async function RootLayout({
             strategy="afterInteractive"
           />
         )}
-        <PanelProvider>
-          <Map restaurants={restaurants} />
-          <PanelWithContent>{children}</PanelWithContent>
-        </PanelProvider>
+        <LinguiClientProvider locale={linguiLocale} messages={messages}>
+          <PanelProvider>
+            <Map restaurants={restaurants} />
+            <PanelWithContent>{children}</PanelWithContent>
+          </PanelProvider>
+        </LinguiClientProvider>
       </body>
     </html>
   );

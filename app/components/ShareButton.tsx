@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Trans } from "@lingui/react/macro";
+import { t } from "@lingui/core/macro";
 
 interface ShareButtonProps {
   title: string;
@@ -11,11 +13,9 @@ export default function ShareButton({ title, url }: ShareButtonProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setMounted(true);
   }, []);
-
-
 
   const handleShare = async () => {
     try {
@@ -26,7 +26,7 @@ export default function ShareButton({ title, url }: ShareButtonProps) {
 
       await navigator.share({
         title: title,
-        text: `Découvre ce restaurant : ${title}`,
+        text: t`share.text title=${title}`,
         url: absoluteUrl,
       });
     } catch (error) {
@@ -45,7 +45,7 @@ export default function ShareButton({ title, url }: ShareButtonProps) {
     <button
       onClick={handleShare}
       className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-(--color-primary) text-white hover:bg-(--color-primary-dark) transition-colors duration-200"
-      aria-label="Partager ce restaurant"
+      aria-label={t`share.ariaLabel`}
     >
       <svg
         width="16"
@@ -61,7 +61,7 @@ export default function ShareButton({ title, url }: ShareButtonProps) {
         <path d="m8 7 4-4 4 4" />
         <path d="M4 14v6h16v-6" />
       </svg>
-      Partager
+      <Trans id="share.button">Share</Trans>
     </button>
   );
 }
