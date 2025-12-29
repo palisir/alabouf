@@ -188,12 +188,16 @@ export default function Map({
         // Not on restaurant detail page: try to geolocate user
         if (geolocateControlRef.current) {
           // If geolocation fails, fly to Montreal as fallback
+          // Check current pathname when error fires - user may have navigated to a restaurant
           geolocateControlRef.current.once("error", () => {
-            map.flyTo({
-              center: MONTREAL_CENTER,
-              zoom,
-              duration: 1000,
-            });
+            // Only fly to Montreal if still NOT on a restaurant detail page
+            if (!isRestaurantDetailPage(pathnameRef.current)) {
+              map.flyTo({
+                center: MONTREAL_CENTER,
+                zoom,
+                duration: 1000,
+              });
+            }
           });
           geolocateControlRef.current.trigger();
         }
@@ -281,11 +285,11 @@ export default function Map({
           restaurant.fields.location!.lon,
           restaurant.fields.location!.lat,
         ];
+        // Use jumpTo for immediate centering (not affected by pending geolocation callbacks)
         // Padding is handled by persistent map.setPadding(), no need to pass it here
-        mapRef.current.flyTo({
+        mapRef.current.jumpTo({
           center: coordinates,
           zoom: 18,
-          duration: 1000,
         });
       }
     }
@@ -299,15 +303,8 @@ export default function Map({
 
     const padding = getPadding();
     mapRef.current.setPadding(padding);
-
-    // Smoothly adjust the view to account for the new padding
-    // by re-centering on the current center (which is now calculated with new padding)
-    if (mapRef.current.isStyleLoaded()) {
-      mapRef.current.easeTo({
-        center: mapRef.current.getCenter(),
-        duration: 300,
-      });
-    }
+    // Note: Don't call easeTo here - it would cancel any ongoing flyTo animations
+    // Mapbox handles padding changes natively
   }, [isOpen, getPadding]);
 
   // Update padding on window resize (since padding is based on viewport dimensions)
