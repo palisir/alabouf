@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import type { Document } from "@contentful/rich-text-types";
+import type { Asset } from "contentful";
 import { getRestaurantBySlug } from "@/lib/contentful/restaurants";
 import { getPreferredLocale } from "@/lib/contentful/locale";
 import { richTextOptions } from "@/lib/contentful/richTextOptions";
@@ -21,7 +23,7 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
     notFound();
   }
 
-  const { name, favorite, instagram, tags, review } = restaurant.fields;
+  const { name, favorite, instagram, tags, review, picture } = restaurant.fields;
 
   return (
     <>
@@ -47,6 +49,34 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
                 {tag}
               </span>
             ))}
+          </div>
+        )}
+
+        {picture && picture.length > 0 && (
+          <div className="mb-6 -mx-4 md:mx-0">
+            <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-3 px-4 md:px-0">
+              {(picture as Asset[]).map((asset, index) => {
+                const url = asset.fields?.file?.url;
+                const title = asset.fields?.title || `${name} photo ${index + 1}`;
+                if (!url) return null;
+
+                return (
+                  <div
+                    key={asset.sys?.id || index}
+                    className="shrink-0 snap-start"
+                  >
+                    <Image
+                      src={`https:${url}?w=600&fm=webp&q=80`}
+                      alt={String(title)}
+                      width={300}
+                      height={200}
+                      className="rounded-lg object-cover h-48 w-auto"
+                      loading={index === 0 ? "eager" : "lazy"}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
 
