@@ -12,7 +12,8 @@
     "downcase-tags": "bun run scripts/downcase-restaurant-tags.ts",
     "downcase-tags:dry": "DRY_RUN=true bun run scripts/downcase-restaurant-tags.ts",
     "fix-review-locale": "bun run scripts/fix-review-locale.ts",
-    "fix-review-locale:dry": "DRY_RUN=true bun run scripts/fix-review-locale.ts"
+    "fix-review-locale:dry": "DRY_RUN=true bun run scripts/fix-review-locale.ts",
+    "check-location": "bun run scripts/check-restaurants-without-location.ts"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
