@@ -2,7 +2,7 @@ import { headers } from 'next/headers';
 
 export const SUPPORTED_LOCALES = ['fr', 'en-US'] as const;
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number];
-export const DEFAULT_LOCALE: SupportedLocale = 'fr';
+export const DEFAULT_LOCALE: SupportedLocale = 'en-US';
 
 // Lingui uses simpler locale codes
 export const LINGUI_LOCALES = ['fr', 'en'] as const;
