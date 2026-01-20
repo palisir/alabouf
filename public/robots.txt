@@ -1,0 +1,12 @@
+# robots.txt
+# Restaurant discovery map - allow indexing of all public content
+
+User-agent: *
+Allow: /
+
+# Block Next.js internals and API routes
+Disallow: /_next/
+Disallow: /api/
+
+# Sitemap location (production URL)
+Sitemap: https://www.alabouf.com/sitemap.xml
