@@ -3,10 +3,7 @@ import { getRestaurants } from "@/lib/contentful/restaurants";
 import { getStaticPages } from "@/lib/contentful/static-pages";
 import { DEFAULT_LOCALE } from "@/lib/contentful/locale";
 
-// Use Vercel URL for preview deployments, fallback to production
-const BASE_URL = process.env.NEXT_PUBLIC_VERCEL_URL
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-    : "https://www.alabouf.com";
+const BASE_URL = "https://www.alabouf.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Fetch all dynamic content from Contentful
