@@ -4,6 +4,12 @@ export const SUPPORTED_LOCALES = ['fr', 'en-US', 'es', 'pt', 'zh', 'de', 'ja'] a
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number];
 export const DEFAULT_LOCALE: SupportedLocale = 'en-US';
 
+// Contentful stores content in only two locales: en-US (default) and fr,
+// with fr falling back to en-US natively. Every other UI language reads en-US content.
+export function toContentfulLocale(locale: SupportedLocale): 'en-US' | 'fr' {
+  return locale === 'fr' ? 'fr' : 'en-US';
+}
+
 // Maps a base language code (from Accept-Language) to its Contentful locale.
 const LANG_TO_LOCALE: Record<string, SupportedLocale> = {
   en: 'en-US', fr: 'fr', es: 'es', pt: 'pt', zh: 'zh', de: 'de', ja: 'ja',
@@ -29,17 +35,5 @@ export async function getPreferredLocale(): Promise<SupportedLocale> {
   }
 
   return DEFAULT_LOCALE;
-}
-
-/**
- * Extracts a localized field value with French fallback.
- * Used when fetching with locale: '*'.
- */
-export function getLocalizedField<T>(
-  field: Record<string, T | undefined> | undefined,
-  locale: SupportedLocale
-): T | undefined {
-  if (!field) return undefined;
-  return field[locale] ?? field[DEFAULT_LOCALE];
 }
 
