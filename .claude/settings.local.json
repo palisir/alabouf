@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(tsx scripts/check-restaurants-without-location.ts:*)",
-      "Bash(bun run:*)"
-    ]
-  }
-}

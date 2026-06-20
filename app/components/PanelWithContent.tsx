@@ -39,8 +39,8 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
     const isHomePage = pathname === "/";
 
     if (isHomePage) {
-      // Close panel and reset ref when navigating to home page
-      closePanel();
+      // Open panel on home page to show home content
+      openPanel();
       lastPathnameRef.current = "";
     } else if (pathname !== lastPathnameRef.current) {
       // Open panel on new navigation to non-home pages
@@ -81,7 +81,7 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
       {isOpen && !isRestaurantDetail && (
         <div
           className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300"
-          onClick={() => router.push("/")}
+          onClick={() => pathname === "/" ? closePanel() : router.push("/")}
           aria-hidden="true"
         />
       )}

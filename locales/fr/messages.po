@@ -116,6 +116,21 @@ msgid "restaurant.viewAll"
 msgstr "Voir tous les restaurants"
 
 #. js-lingui-explicit-id
-#: app/page.tsx:9
+#: app/components/HomeContent.tsx
+msgid "home.cta"
+msgstr "Voir les {totalCount} restaurants"
+
+#. js-lingui-explicit-id
+#: app/components/HomeContent.tsx
+msgid "home.favorites.title"
+msgstr "Nos coups de coeur"
+
+#. js-lingui-explicit-id
+#: app/components/HomeContent.tsx
 msgid "home.tagline"
 msgstr "On a testé, on a aimé, on partage. Nos restos favoris sur une carte."
+
+#. js-lingui-explicit-id
+#: app/components/HomeContent.tsx
+msgid "home.tags.title"
+msgstr "Explorer par catégorie"
