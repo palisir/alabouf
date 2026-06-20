@@ -30,5 +30,6 @@ export interface NewsSkeleton extends EntrySkeletonType {
     slug: EntryFieldTypes.Symbol;
     body: EntryFieldTypes.RichText;
     publishedDate: EntryFieldTypes.Date;
+    restaurants?: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<RestaurantSkeleton>>;
   };
 }
