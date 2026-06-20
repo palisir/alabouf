@@ -24,13 +24,6 @@ interface HomeContentProps {
 export default function HomeContent({ favorites, allTags, totalCount }: HomeContentProps) {
   return (
     <div className="space-y-8">
-      {/* Tagline */}
-      <div className="text-center">
-        <p className="text-base text-gray-600 leading-relaxed">
-          <Trans id="home.tagline">We tried, we loved, we share. Our favorite restaurants on a map.</Trans>
-        </p>
-      </div>
-
       {/* Favorites Photo Mosaic */}
       {favorites.length > 0 && (
         <div>
