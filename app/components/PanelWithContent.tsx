@@ -7,6 +7,7 @@ import PanelToggleButton from "./PanelToggleButton";
 import { usePanel } from "./PanelContext";
 import { ReactNode } from "react";
 import { Trans } from "@lingui/react/macro";
+import { isRestaurantDetail as isRestaurantDetailPath } from "@/lib/routes";
 
 interface PanelWithContentProps {
   children: ReactNode;
@@ -19,8 +20,7 @@ export default function PanelWithContent({ children }: PanelWithContentProps) {
   const lastPathnameRef = useRef<string>("");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Detect if we're on a restaurant detail page
-  const isRestaurantDetail = /^\/restaurants\/[^/]+$/.test(pathname);
+  const isRestaurantDetail = isRestaurantDetailPath(pathname);
 
   // Track panel top position separately to avoid flicker when closing
   // Only update when panel is transitioning from closed to open

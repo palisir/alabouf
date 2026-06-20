@@ -1,27 +1,24 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import mapboxgl from "mapbox-gl";
 import type { Entry } from "contentful";
 import type { RestaurantSkeleton } from "@/lib/contentful/types";
 import { usePanel } from "./PanelContext";
 import { useMapPadding } from "./useMapPadding";
+import { isRestaurantDetail, restaurantSlugFromPath } from "@/lib/routes";
 
 // Montreal default center coordinates
 const MONTREAL_CENTER: [number, number] = [-73.5673, 45.5017];
+const DEFAULT_ZOOM = 11;
+const MAP_STYLE = "mapbox://styles/alabouf/cmhfp7e88001g01qib2sbedku";
 
 interface MapProps {
   restaurants: Entry<RestaurantSkeleton, undefined, string>[];
-  zoom?: number;
-  style?: string;
 }
 
-export default function Map({
-  restaurants,
-  zoom = 11,
-  style = "mapbox://styles/alabouf/cmhfp7e88001g01qib2sbedku",
-}: MapProps) {
+export default function Map({ restaurants }: MapProps) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const geolocateControlRef = useRef<mapboxgl.GeolocateControl | null>(null);
@@ -33,11 +30,6 @@ export default function Map({
   const pathnameRef = useRef(pathname);
   const router = useRouter();
   const routerRef = useRef(router);
-
-  // Helper to check if on restaurant detail page
-  const isRestaurantDetailPage = useCallback((path: string) => {
-    return /^\/restaurants\/[^/]+$/.test(path);
-  }, []);
 
   // Update refs when values change, but don't trigger map reload
   useEffect(() => {
@@ -55,9 +47,9 @@ export default function Map({
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style,
+      style: MAP_STYLE,
       center: MONTREAL_CENTER,
-      zoom,
+      zoom: DEFAULT_ZOOM,
       collectResourceTiming: false, // Disable telemetry data collection
     });
 
@@ -161,10 +153,7 @@ export default function Map({
     ) {
 
       // Check if we're on a single restaurant page
-      const restaurantSlugMatch = pathnameRef.current.match(
-        /^\/restaurants\/([^/]+)$/
-      );
-      const restaurantSlug = restaurantSlugMatch?.[1];
+      const restaurantSlug = restaurantSlugFromPath(pathnameRef.current);
 
       if (restaurantSlug) {
         // Find the restaurant by slug and center on it
@@ -191,10 +180,10 @@ export default function Map({
           // Check current pathname when error fires - user may have navigated to a restaurant
           geolocateControlRef.current.once("error", () => {
             // Only fly to Montreal if still NOT on a restaurant detail page
-            if (!isRestaurantDetailPage(pathnameRef.current)) {
+            if (!isRestaurantDetail(pathnameRef.current)) {
               map.flyTo({
                 center: MONTREAL_CENTER,
-                zoom,
+                zoom: DEFAULT_ZOOM,
                 duration: 1000,
               });
             }
@@ -248,7 +237,7 @@ export default function Map({
 
         // Only handle if not clicking on a restaurant
         if (features.length === 0) {
-          const onRestaurantDetail = isRestaurantDetailPage(pathnameRef.current);
+          const onRestaurantDetail = isRestaurantDetail(pathnameRef.current);
           const isMobile = window.innerWidth < 768;
           
           if (onRestaurantDetail && isMobile) {
@@ -265,15 +254,14 @@ export default function Map({
     return () => {
       map.remove();
     };
-  }, [restaurants, zoom, style, isRestaurantDetailPage]);
+  }, [restaurants]);
 
   // Update map center when pathname changes (navigating between restaurants)
   // This handles pathname changes after the map is already loaded
   useEffect(() => {
     if (!mapRef.current) return;
 
-    const restaurantSlugMatch = pathname.match(/^\/restaurants\/([^/]+)$/);
-    const restaurantSlug = restaurantSlugMatch?.[1];
+    const restaurantSlug = restaurantSlugFromPath(pathname);
 
     if (restaurantSlug && mapRef.current.isStyleLoaded()) {
       const restaurant = restaurants.find(
@@ -293,7 +281,7 @@ export default function Map({
         });
       }
     }
-  }, [pathname, restaurants, isRestaurantDetailPage]);
+  }, [pathname, restaurants]);
 
   // Set persistent map padding based on panel state
   // This makes Mapbox SDK natively understand the visible viewport,
@@ -322,9 +310,8 @@ export default function Map({
   useEffect(() => {
     if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
 
-    const onRestaurantDetail = isRestaurantDetailPage(pathname);
-    const restaurantSlugMatch = pathname.match(/^\/restaurants\/([^/]+)$/);
-    const activeSlug = onRestaurantDetail && isOpen ? restaurantSlugMatch?.[1] : null;
+    const onRestaurantDetail = isRestaurantDetail(pathname);
+    const activeSlug = onRestaurantDetail && isOpen ? restaurantSlugFromPath(pathname) : null;
 
     // Scale up the active restaurant marker, reset others
     mapRef.current.setLayoutProperty("restaurants", "icon-size", 
@@ -332,7 +319,7 @@ export default function Map({
         ? ["case", ["==", ["get", "slug"], activeSlug], 1.2, 1]
         : 1
     );
-  }, [pathname, isOpen, isRestaurantDetailPage]);
+  }, [pathname, isOpen]);
 
   return (
     <div

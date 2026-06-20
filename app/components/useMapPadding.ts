@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { usePathname } from "next/navigation";
 import mapboxgl from "mapbox-gl";
 import { usePanel } from "./PanelContext";
+import { isRestaurantDetail } from "@/lib/routes";
 
 // Desktop panel width as a fraction of viewport width (matches PanelWithContent.tsx: 33vw)
 const DESKTOP_PANEL_WIDTH_FRACTION = 0.33;
@@ -12,8 +13,7 @@ export function useMapPadding() {
   const { isOpen } = usePanel();
   const pathname = usePathname();
 
-  // Check if on restaurant detail page
-  const isRestaurantDetailPage = /^\/restaurants\/[^/]+$/.test(pathname);
+  const isRestaurantDetailPage = isRestaurantDetail(pathname);
 
   const getPadding = useCallback((): mapboxgl.PaddingOptions => {
     if (typeof window === "undefined" || !isOpen) {
