@@ -7,7 +7,7 @@ import LinguiClientProvider from "./components/LinguiClientProvider";
 import Map from "./components/Map";
 import PanelWithContent from "./components/PanelWithContent";
 import { getRestaurants } from "@/lib/contentful/restaurants";
-import { getPreferredLocale, toLinguiLocale } from "@/lib/contentful/locale";
+import { getPreferredLocale } from "@/lib/contentful/locale";
 import { loadCatalog } from "@/lib/i18n";
 
 const roboto = Roboto({
@@ -50,7 +50,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const contentfulLocale = await getPreferredLocale();
-  const linguiLocale = toLinguiLocale(contentfulLocale);
+  // Contentful uses 'en-US'; Lingui uses the bare 'en'.
+  const linguiLocale = contentfulLocale === "en-US" ? "en" : contentfulLocale;
   const [{ items: restaurants }, messages] = await Promise.all([
     getRestaurants(contentfulLocale),
     loadCatalog(linguiLocale),

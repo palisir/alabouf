@@ -4,21 +4,14 @@ export const SUPPORTED_LOCALES = ['fr', 'en-US', 'es', 'pt', 'zh', 'de', 'ja'] a
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number];
 export const DEFAULT_LOCALE: SupportedLocale = 'en-US';
 
-// Lingui uses simpler locale codes
-export const LINGUI_LOCALES = ['fr', 'en', 'es', 'pt', 'zh', 'de', 'ja'] as const;
-export type LinguiLocale = typeof LINGUI_LOCALES[number];
-
-/**
- * Maps Contentful locale to Lingui locale.
- * Contentful uses 'en-US', Lingui uses 'en'.
- */
-export function toLinguiLocale(contentfulLocale: SupportedLocale): LinguiLocale {
-  return contentfulLocale === 'en-US' ? 'en' : contentfulLocale;
-}
+// Maps a base language code (from Accept-Language) to its Contentful locale.
+const LANG_TO_LOCALE: Record<string, SupportedLocale> = {
+  en: 'en-US', fr: 'fr', es: 'es', pt: 'pt', zh: 'zh', de: 'de', ja: 'ja',
+};
 
 /**
  * Detects the user's preferred locale from Accept-Language header.
- * Falls back to French if no supported language is found.
+ * Falls back to DEFAULT_LOCALE if no supported language is found.
  */
 export async function getPreferredLocale(): Promise<SupportedLocale> {
   const headersList = await headers();
@@ -32,13 +25,7 @@ export async function getPreferredLocale(): Promise<SupportedLocale> {
     .map(lang => lang.trim().split(';')[0].split('-')[0].toLowerCase());
 
   for (const lang of languages) {
-    if (lang === 'en') return 'en-US';
-    if (lang === 'fr') return 'fr';
-    if (lang === 'es') return 'es';
-    if (lang === 'pt') return 'pt';
-    if (lang === 'zh') return 'zh';
-    if (lang === 'de') return 'de';
-    if (lang === 'ja') return 'ja';
+    if (LANG_TO_LOCALE[lang]) return LANG_TO_LOCALE[lang];
   }
 
   return DEFAULT_LOCALE;

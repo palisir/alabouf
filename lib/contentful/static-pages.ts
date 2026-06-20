@@ -37,14 +37,6 @@ export async function getStaticPages(locale: SupportedLocale = DEFAULT_LOCALE) {
   };
 }
 
-export async function getStaticPageById(
-  id: string,
-  locale: SupportedLocale = DEFAULT_LOCALE
-) {
-  const entry = await contentfulClient.getEntry<StaticPageSkeleton>(id);
-  return transformEntry(entry as unknown as { sys: unknown; fields: LocalizedFields }, locale);
-}
-
 export async function getStaticPageBySlug(
   slug: string,
   locale: SupportedLocale = DEFAULT_LOCALE

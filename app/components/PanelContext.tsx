@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useMemo, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 
 interface PanelContextType {
   isOpen: boolean;
@@ -26,19 +26,12 @@ interface PanelProviderProps {
 export function PanelProvider({ children }: PanelProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const togglePanel = useCallback(() => setIsOpen(prev => !prev), []);
-  const closePanel = useCallback(() => setIsOpen(false), []);
-  const openPanel = useCallback(() => setIsOpen(true), []);
-
-  const value = useMemo(() => ({
-    isOpen,
-    closePanel,
-    openPanel,
-    togglePanel,
-  }), [isOpen, closePanel, openPanel, togglePanel]);
+  const togglePanel = () => setIsOpen(prev => !prev);
+  const closePanel = () => setIsOpen(false);
+  const openPanel = () => setIsOpen(true);
 
   return (
-    <PanelContext.Provider value={value}>
+    <PanelContext.Provider value={{ isOpen, closePanel, openPanel, togglePanel }}>
       {children}
     </PanelContext.Provider>
   );

@@ -48,14 +48,6 @@ export async function getRestaurants(
   };
 }
 
-export async function getRestaurantById(
-  id: string,
-  locale: SupportedLocale = DEFAULT_LOCALE
-) {
-  const entry = await contentfulClient.getEntry<RestaurantSkeleton>(id);
-  return transformEntry(entry as unknown as { sys: unknown; fields: LocalizedFields }, locale);
-}
-
 export async function getRestaurantBySlug(
   slug: string,
   locale: SupportedLocale = DEFAULT_LOCALE
