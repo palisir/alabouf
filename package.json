@@ -18,7 +18,8 @@
     "translate-restaurants": "bun run scripts/translate-restaurants.ts",
     "translate-restaurants:tags": "bun run scripts/translate-restaurants.ts --include-tags",
     "translate-restaurants:dry": "bun run scripts/translate-restaurants.ts --dry-run",
-    "check-location": "bun run scripts/check-restaurants-without-location.ts"
+    "check-location": "bun run scripts/check-restaurants-without-location.ts",
+    "create-news-type": "bun run scripts/create-news-content-type.ts"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

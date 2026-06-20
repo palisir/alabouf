@@ -22,3 +22,13 @@ export interface StaticPageSkeleton extends EntrySkeletonType {
     body: EntryFieldTypes.RichText;
   };
 }
+
+export interface NewsSkeleton extends EntrySkeletonType {
+  contentTypeId: 'news';
+  fields: {
+    title: EntryFieldTypes.Symbol;
+    slug: EntryFieldTypes.Symbol;
+    body: EntryFieldTypes.RichText;
+    publishedDate: EntryFieldTypes.Date;
+  };
+}
